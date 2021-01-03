@@ -1,4 +1,7 @@
-welcomeMsg = Hallo, herzlich willkommen bei Wer Wird MillionÃ¤r.
+welcomeMsg = Hallo,ich bin Alexa. Willkommen in unserer Anwendung zum Erlernen von Sprachen über Dialoge. Das Programm ist in zwei Teile unterteilt.
+Der erste Teil enthält eine Sammlung von Sätzen zum lernen. Der zweite Teil bietet eine praktische Anwendung der erlernten Sätze in Dialogen. Ich empfehle zum Start erst einmal die Sätze zu üben. 
+Es gibt 3 Schwierigkeitsstufen. Anfänger, Erfahren, wenn du schon ein bischen Englisch kannst, und sehr erfahren, wenn du bereits sehr gut sprichst. Die Schwierigkeitsstufen lassen sich im nachhinein noch ändern. Also. Welche Schwierigkeit willst du probieren?
+gamemodeMsg = Und welchen Modus möchtest du spielen? Sätze oder Dialoge?
 wrongMsg = Das ist leider falsch.
 correctMsg = Das ist richtig
 continueMsg = MÃ¶chten Sie weiterspielen?

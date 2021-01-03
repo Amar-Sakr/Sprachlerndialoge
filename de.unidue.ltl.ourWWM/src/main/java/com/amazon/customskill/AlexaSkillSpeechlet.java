@@ -63,16 +63,19 @@ implements SpeechletV2
 	static boolean fiftyfiftyUsed;
 	static String question = "";
 	static String correctAnswer = "";
+	static int diff;
+	static int gameMode;
+	
 
 	// Was der User gesagt hat
 	public static String userRequest;
 
 	// In welchem Spracherkennerknoten sind wir?
-	static enum RecognitionState {Answer, YesNo};
+	static enum RecognitionState {Answer, YesNo, Difficulty, Gamemode};
 	RecognitionState recState;
 
 	// Was hat der User grade gesagt. (Die "Semantic Tags"aus DialogOS)
-	static enum UserIntent {Yes, No, A, B, C, D, Publikum, FiftyFifty, Error};
+	static enum UserIntent {Yes, No, A, B, C, D, Publikum, FiftyFifty, Error, Leicht, Schwer, Dialoge, S‰tze};
 	UserIntent ourUserIntent;
 
 	// Was das System sagen kann
@@ -131,8 +134,8 @@ implements SpeechletV2
 	{
 		logger.info("onLaunch");
 		selectQuestion();
-		recState = RecognitionState.Answer;
-		return askUserResponse(utterances.get("welcomeMsg")+" "+question);
+		recState = RecognitionState.Difficulty;
+		return askUserResponse(utterances.get("welcomeMsg"));
 	}
 
 	// Ziehe eine Frage aus der Datenbank, abh√§ngig von der aktuellen Gewinnsumme, setze question und correctAnswer
@@ -149,6 +152,7 @@ implements SpeechletV2
 			e.printStackTrace();
 		}
 	}
+		
 
 
 	// Hier gehen wir rein, wenn der User etwas gesagt hat
@@ -165,6 +169,8 @@ implements SpeechletV2
 		switch (recState) {
 		case Answer: resp = evaluateAnswer(userRequest); break;
 		case YesNo: resp = evaluateYesNo(userRequest); recState = RecognitionState.Answer; break;
+		case Difficulty: resp = evaluateDiff(userRequest); recState = RecognitionState.Gamemode; break;
+		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Answer; break;
 		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);
 		}   
 		return resp;
@@ -237,6 +243,45 @@ implements SpeechletV2
 			}
 		}
 		}
+		
+		return res;
+	}
+	private SpeechletResponse evaluateDiff(String userRequest) {
+		SpeechletResponse res = null;
+		recognizeUserIntent(userRequest);
+		switch (ourUserIntent) {
+		case Leicht:{
+			diff = 1;
+			res = askUserResponse(utterances.get("gamemodeMsg"));
+		}; break;
+		case Schwer:{
+			diff = 2;
+			res = askUserResponse(utterances.get("gamemodeMsg"));
+		}; break;
+		default: {
+			res = askUserResponse(utterances.get(""));
+		}
+		}
+		return res;
+	}
+	
+	private SpeechletResponse evaluateGamemode(String userRequest) {
+		SpeechletResponse res = null;
+		recognizeUserIntent(userRequest);
+		switch (ourUserIntent) {
+		case S‰tze:{
+			gameMode = 1;
+			selectQuestion();
+			res = askUserResponse(question);
+		}; break;
+		case Dialoge:{
+			gameMode = 2;
+			res = askUserResponse(question);
+		}; break;
+		default: {
+			res = askUserResponse(utterances.get(""));
+		}
+		}
 		return res;
 	}
 
@@ -278,7 +323,7 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
-		String pattern0 = "(i want to play )?(the )?(sentences|dialogue)( mode)?( please)?";
+		String pattern0 = "(i want to play )?(the )?(sentences|dialogues)( mode)?( please)?";
 		String pattern1 = "(ich nehme )?(antwort )?(\\b[a-d]\\b)( bitte)?";
 		String pattern2 = "(ich nehme )?(den )?publikumsjoker( bitte)?";
 		String pattern3 = "(ich nehme )?(den )?(fiftyfifty|f√ºnfzigf√ºnfzig) joker( bitte)?";
@@ -299,7 +344,21 @@ implements SpeechletV2
 		Matcher m4 = p4.matcher(userRequest);
 		Pattern p5 = Pattern.compile(pattern5);
 		Matcher m5 = p5.matcher(userRequest);
-		if (m1.find()) {
+		if (m.find()) {
+			String answer = m.group(3);
+			switch (answer) {
+			case "easy": ourUserIntent = UserIntent.Leicht; break;
+			case "difficult": ourUserIntent = UserIntent.Schwer; break;
+			}
+		}
+		else if (m0.find()) {
+			String answer = m0.group(3);
+			switch (answer) {
+			case "sentences": ourUserIntent = UserIntent.S‰tze; break;
+			case "dialogues": ourUserIntent = UserIntent.Dialoge; break;
+			}
+		}
+		else if (m1.find()) {
 			String answer = m1.group(3);
 			switch (answer) {
 			case "a": ourUserIntent = UserIntent.A; break;
