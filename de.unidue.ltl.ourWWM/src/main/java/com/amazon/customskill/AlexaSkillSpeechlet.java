@@ -276,6 +276,7 @@ implements SpeechletV2
 
 	// Achtung, Reihenfolge ist wichtig!
 	void recognizeUserIntent(String userRequest) {
+		//test
 		userRequest = userRequest.toLowerCase();
 		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogue)( mode)?( please)?";
