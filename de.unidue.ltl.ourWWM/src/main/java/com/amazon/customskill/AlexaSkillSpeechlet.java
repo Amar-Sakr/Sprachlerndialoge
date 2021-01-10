@@ -56,13 +56,11 @@ implements SpeechletV2
 	static Logger logger = LoggerFactory.getLogger(AlexaSkillSpeechlet.class);
 
 	// Variablen, die wir auch schon in DialogOS hatten
-	static int sum;
 	static String answerOption1 = "";
 	static String answerOption2 = "";
-	static boolean publikumUsed;
-	static boolean fiftyfiftyUsed;
 	static String question = "";
 	static String correctAnswer = "";
+	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
 	
@@ -120,9 +118,7 @@ implements SpeechletV2
 	{
 		logger.info("Alexa session begins");
 		utterances = readSystemUtterances();
-		publikumUsed = false;
-		fiftyfiftyUsed = false;
-		sum = 0;
+		
 	}
 
 	// Wir starten den Dialog:
@@ -145,6 +141,9 @@ implements SpeechletV2
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
 			question = rs.getString("SätzeLeicht");
+			ResultSet rs1 = stmt
+					.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
+			sätzeDeutsch = rs1.getString("SätzeLeicht");
 			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
@@ -186,7 +185,7 @@ implements SpeechletV2
 			selectQuestion();
 			res = askUserResponse(question); break;
 		} case No: {
-			res = tellUserAndFinish(buildString(utterances.get("sumMsg"), String.valueOf(sum), "")+" "+utterances.get("goodbyeMsg")); break;
+			res = tellUserAndFinish(utterances.get("sumMsg")+" "+utterances.get("goodbyeMsg")); break;
 		} default: {
 			res = askUserResponse(utterances.get(""));
 		}
@@ -199,24 +198,6 @@ implements SpeechletV2
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
-		case Publikum: {
-			if (publikumUsed) {
-				res = askUserResponse(utterances.get("publikumUsedMsg"));
-			} else {
-				publikumUsed = true;
-				usePublikumJoker();
-				res = askUserResponse(buildString(utterances.get("publikumAnswerMsg"), answerOption1, answerOption2));
-			}
-		}; break; 
-		case FiftyFifty: {
-			if (fiftyfiftyUsed) {
-				res = askUserResponse(utterances.get("fiftyfiftyUsedMsg"));
-			} else {
-				fiftyfiftyUsed = true;
-				useFiftyFiftyJoker();
-				res = askUserResponse(buildString(utterances.get("fiftyfiftyAnswerMsg"), answerOption1, answerOption2));
-			}
-		}; break; 
 		default :{
 			if (ourUserIntent.equals(UserIntent.A) 
 					|| ourUserIntent.equals(UserIntent.B)
@@ -226,16 +207,14 @@ implements SpeechletV2
 				logger.info("User answer ="+ ourUserIntent.name().toLowerCase()+ "/correct answer="+correctAnswer);
 				if (ourUserIntent.name().toLowerCase().equals(correctAnswer)) {
 					logger.info("User answer recognized as correct.");
-					increaseSum();
-					if (sum == 1000000) {
+					//if
 						res = tellUserAndFinish(utterances.get("correctMsg")+" "+utterances.get("congratsMsg")+" "+utterances.get("goodbyeMsg"));
-					} else {
+					//else
 						recState = RecognitionState.YesNo;
 						res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
-					}
+					
 				} else {
-					setfinalSum();
-					res = tellUserAndFinish(utterances.get("wrongMsg")+ " "+ buildString(utterances.get("sumMsg"), String.valueOf(sum), "")  + " " + utterances.get("goodbyeMsg"));
+					res = tellUserAndFinish(utterances.get("wrongMsg")+ " "+ utterances.get("sumMsg")  + " " + utterances.get("goodbyeMsg"));
 				}
 			} else {
 				res = askUserResponse(utterances.get("errorAnswerMsg"));
@@ -271,12 +250,12 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(question);
+			res = askUserResponse(question+""+sätzeDeutsch);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
 			selectQuestion();
-			res = askUserResponse(question);
+			res = askUserResponse(question+""+sätzeDeutsch);
 		}; break;
 		default: {
 			res = askUserResponse(utterances.get(""));
@@ -285,38 +264,6 @@ implements SpeechletV2
 		return res;
 	}
 
-	private void setfinalSum() {
-		if (sum <500){
-			sum = 0;
-		}else{
-			if(sum <16000){
-				sum = 500;
-			}else{
-				sum=16000;
-			}
-		}
-
-	}
-
-	private void increaseSum() {
-		switch(sum){
-		case 0: sum = 50; break;
-		case 50: sum = 100; break;
-		case 100: sum = 200; break;
-		case 200: sum = 300; break;
-		case 300: sum = 500; break;
-		case 500: sum = 1000; break;
-		case 1000: sum = 2000; break;
-		case 2000: sum = 4000; break;
-		case 4000: sum = 8000; break;
-		case 8000: sum = 16000; break;
-		case 16000: sum = 32000; break;
-		case 32000: sum = 64000; break;
-		case 64000: sum = 125000; break;
-		case 125000: sum = 500000; break;
-		case 500000: sum = 1000000; break;
-		}
-	}
 
 
 	// Achtung, Reihenfolge ist wichtig!
@@ -413,38 +360,7 @@ implements SpeechletV2
 	}
 
 
-	void useFiftyFiftyJoker() {
-		answerOption1 = correctAnswer;
-		do { int r = (int) Math.round(Math.random()*4.0);
-		switch(r){
-		case 1: answerOption2="a"; break;
-		case 2: answerOption2="b"; break;
-		case 3: answerOption2="c"; break;		
-		default:answerOption2="d";
-		}
-		} while(answerOption2==answerOption1);
-		if (correctAnswer=="d" || answerOption2 == "a"
-				|| (answerOption1 == "c" && answerOption2!="d")) {
-			String temp = answerOption1;
-			answerOption1 = answerOption2;
-			answerOption2 = temp;
-		}
-	}
-
-	void usePublikumJoker() {
-		int r = (int) Math.round(Math.random()*20.0);
-		if (r < 1.0) {
-			answerOption1 = "a";
-		} else if (r < 2.0) {
-			answerOption1 = "b";
-		} else if (r < 3.0) {
-			answerOption1 = "c";
-		} else if (r < 4.0) {
-			answerOption1 = "d";
-		} else {
-			answerOption1 = correctAnswer;
-		}
-	}
+	
 
 
 
