@@ -63,6 +63,7 @@ implements SpeechletV2
 	static boolean fiftyfiftyUsed;
 	static String question = "";
 	static String correctAnswer = "";
+	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
 	
