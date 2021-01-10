@@ -44,7 +44,7 @@ import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SsmlOutputSpeech;
 
-//testing
+
 
 /*
  * This class is the actual skill. Here you receive the input and have to produce the speech output. 
