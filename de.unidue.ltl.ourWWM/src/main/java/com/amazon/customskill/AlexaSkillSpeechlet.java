@@ -323,12 +323,23 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
-		String pattern0 = "(i want to play )?(the )?(sentences|dialogues)( mode)?( please)?";
-		String pattern1 = "(ich nehme )?(antwort )?(\\b[a-d]\\b)( bitte)?";
-		String pattern2 = "(ich nehme )?(den )?publikumsjoker( bitte)?";
-		String pattern3 = "(ich nehme )?(den )?(fiftyfifty|fünfzigfünfzig) joker( bitte)?";
-		String pattern4 = "\\bnein\\b";
-		String pattern5 = "\\bja\\b";
+		String pattern0 = "\\bnein\\b";
+		String pattern1 = "\\bja\\b";
+		String pattern2 = "What is your Name";
+		String pattern3 = "My name is Alexa";
+		String pattern4 = "Where are you from";
+		String pattern5 = "I am from Germany";
+		String pattern6 = "I never went to Germany before";
+		String pattern7 = "What are your hobbies";
+		String pattern8 = "My hobbies are reading and dancing";
+		String pattern9 = "Whta do you work";
+		String pattern10 = "I work as an assistant";
+		String pattern11 = "What is your favourite color";
+		String pattern12 = "My favourite color is blue";
+		String pattern13 = "What languages do you speak";
+		String pattern1 = "I am speaking german and englisch";
+		String pattern1 = "Are you sIngle";
+		String pattern1 = "I have to go now, Goodbye";
 
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(userRequest);
