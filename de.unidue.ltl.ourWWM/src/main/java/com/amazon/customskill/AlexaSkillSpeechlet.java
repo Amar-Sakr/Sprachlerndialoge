@@ -183,7 +183,7 @@ implements SpeechletV2
 		switch (ourUserIntent) {
 		case Yes: {
 			selectQuestion();
-			res = askUserResponse(question); break;
+			res = askUserResponse(question+""+sätzeDeutsch); break;
 		} case No: {
 			res = tellUserAndFinish(utterances.get("sumMsg")+" "+utterances.get("goodbyeMsg")); break;
 		} default: {
@@ -197,29 +197,37 @@ implements SpeechletV2
 	private SpeechletResponse evaluateAnswer(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
-		switch (ourUserIntent) {
-		default :{
-			if (ourUserIntent.equals(UserIntent.A) 
-					|| ourUserIntent.equals(UserIntent.B)
-					|| ourUserIntent.equals(UserIntent.C)
-					|| ourUserIntent.equals(UserIntent.D)	
-					) {
-				logger.info("User answer ="+ ourUserIntent.name().toLowerCase()+ "/correct answer="+correctAnswer);
-				if (ourUserIntent.name().toLowerCase().equals(correctAnswer)) {
-					logger.info("User answer recognized as correct.");
+		//switch (ourUserIntent) {
+		//default :{
+			//if (ourUserIntent.equals(UserIntent.A) 
+				//	|| ourUserIntent.equals(UserIntent.B)
+					//|| ourUserIntent.equals(UserIntent.C)
+					//|| ourUserIntent.equals(UserIntent.D)	
+					//) {
+				//logger.info("User answer ="+ ourUserIntent.name().toLowerCase()+ "/correct answer="+correctAnswer);
+				//if (ourUserIntent.name().toLowerCase().equals(correctAnswer)) {
+					//logger.info("User answer recognized as correct.");
 					//if
-						res = tellUserAndFinish(utterances.get("correctMsg")+" "+utterances.get("congratsMsg")+" "+utterances.get("goodbyeMsg"));
+						//res = tellUserAndFinish(utterances.get("correctMsg")+" "+utterances.get("congratsMsg")+" "+utterances.get("goodbyeMsg"));
 					//else
-						recState = RecognitionState.YesNo;
-						res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+						//recState = RecognitionState.YesNo;
+						//res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 					
-				} else {
-					res = tellUserAndFinish(utterances.get("wrongMsg")+ " "+ utterances.get("sumMsg")  + " " + utterances.get("goodbyeMsg"));
-				}
-			} else {
-				res = askUserResponse(utterances.get("errorAnswerMsg"));
-			}
+			//	} else {
+				//	res = tellUserAndFinish(utterances.get("wrongMsg")+ " "+ utterances.get("sumMsg")  + " " + utterances.get("goodbyeMsg"));
+				//}
+			//} else {
+				//res = askUserResponse(utterances.get("errorAnswerMsg"));
+			//}
+		//}
+		//}
+		if(userRequest==correctAnswer) {
+			logger.info("User answer recognized as correct.");
+			recState = RecognitionState.YesNo;
+			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 		}
+		else {
+			res = askUserResponse(utterances.get("wrongMsg")+""+question+""+sätzeDeutsch);
 		}
 		
 		return res;
