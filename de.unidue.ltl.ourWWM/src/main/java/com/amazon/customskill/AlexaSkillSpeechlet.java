@@ -143,9 +143,9 @@ implements SpeechletV2
 			con = DBConnection.getConnection();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM Fragen WHERE Gewinnsumme=" + sum + "");
-			question = rs.getString("Frage");
-			correctAnswer = rs.getString("RichtigeAntwort");
+					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
+			question = rs.getString("SätzeLeicht");
+			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();
