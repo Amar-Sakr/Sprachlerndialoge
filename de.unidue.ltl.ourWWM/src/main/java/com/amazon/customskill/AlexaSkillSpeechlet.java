@@ -277,25 +277,29 @@ implements SpeechletV2
 	// Achtung, Reihenfolge ist wichtig!
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
-		String pattern0 = "\\bnein\\b";
-		String pattern1 = "\\bja\\b";
-		String pattern2 = "What is your Name";
-		String pattern3 = "My name is Alexa";
-		String pattern4 = "Where are you from";
-		String pattern5 = "I am from Germany";
-		String pattern6 = "I never went to Germany before";
-		String pattern7 = "What are your hobbies";
-		String pattern8 = "My hobbies are reading and dancing";
-		String pattern9 = "Whta do you work";
-		String pattern10 = "I work as an assistant";
-		String pattern11 = "What is your favourite color";
-		String pattern12 = "My favourite color is blue";
-		String pattern13 = "What languages do you speak";
-		String pattern14 = "I am speaking german and englisch";
-		String pattern15 = "Are you sIngle";
-		String pattern16 = "I have to go now, Goodbye";
+		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
+		String pattern0 = "(i want to play )?(the )?(sentences|dialogues)( mode)?( please)?";
+		String pattern1 = "What is your Name";
+		String pattern2 = "My name is Alexa";
+		String pattern3 = "Where are you from";
+		String pattern4 = "I am from Germany";
+		String pattern5 = "I never went to Germany before";
+		String pattern6 = "What are your hobbies";
+		String pattern7 = "My hobbies are reading and dancing";
+		String pattern8 = "Whta do you work";
+		String pattern9 = "I work as an assistant";
+		String pattern10 = "What is your favourite color";
+		String pattern11 = "My favourite color is blue";
+		String pattern12 = "What languages do you speak";
+		String pattern13 = "I am speaking german and englisch";
+		String pattern14 = "Are you sIngle";
+		String pattern15 = "I have to go now, Goodbye";
+		String pattern16 = "\\bno\\b";
+		String pattern17 = "\\byes\\b";
 
 
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(userRequest);
 		Pattern p0 = Pattern.compile(pattern0);
 		Matcher m0 = p0.matcher(userRequest);
 		Pattern p1 = Pattern.compile(pattern1);
@@ -309,27 +313,29 @@ implements SpeechletV2
 		Pattern p5 = Pattern.compile(pattern5);
 		Matcher m5 = p5.matcher(userRequest);
 		Pattern p6 = Pattern.compile(pattern6);
-		Matcher m6 = p5.matcher(userRequest);
+		Matcher m6 = p6.matcher(userRequest);
 		Pattern p7 = Pattern.compile(pattern7);
-		Matcher m7 = p5.matcher(userRequest);
+		Matcher m7 = p7.matcher(userRequest);
 		Pattern p8 = Pattern.compile(pattern8);
-		Matcher m8 = p5.matcher(userRequest);
+		Matcher m8 = p8.matcher(userRequest);
 		Pattern p9 = Pattern.compile(pattern9);
-		Matcher m9 = p5.matcher(userRequest);
+		Matcher m9 = p9.matcher(userRequest);
 		Pattern p10 = Pattern.compile(pattern10);
-		Matcher m10 = p5.matcher(userRequest);
+		Matcher m10 = p10.matcher(userRequest);
 		Pattern p11 = Pattern.compile(pattern11);
-		Matcher m11 = p5.matcher(userRequest);
+		Matcher m11 = p11.matcher(userRequest);
 		Pattern p12 = Pattern.compile(pattern12);
-		Matcher m12 = p5.matcher(userRequest);
+		Matcher m12 = p12.matcher(userRequest);
 		Pattern p13 = Pattern.compile(pattern13);
-		Matcher m13 = p5.matcher(userRequest);
+		Matcher m13 = p13.matcher(userRequest);
 		Pattern p14 = Pattern.compile(pattern14);
-		Matcher m14 = p5.matcher(userRequest);
+		Matcher m14 = p14.matcher(userRequest);
 		Pattern p15 = Pattern.compile(pattern15);
-		Matcher m15 = p5.matcher(userRequest);
+		Matcher m15 = p15.matcher(userRequest);
 		Pattern p16 = Pattern.compile(pattern16);
-		Matcher m16 = p5.matcher(userRequest);
+		Matcher m16 = p16.matcher(userRequest);
+		Pattern p17 = Pattern.compile(pattern17);
+		Matcher m17 = p17.matcher(userRequest);
 		
 		if (m.find()) {
 			String answer = m.group(3);
