@@ -133,7 +133,6 @@ implements SpeechletV2
 	public SpeechletResponse onLaunch(SpeechletRequestEnvelope<LaunchRequest> requestEnvelope)
 	{
 		logger.info("onLaunch");
-		selectQuestion();
 		recState = RecognitionState.Difficulty;
 		return askUserResponse(utterances.get("welcomeMsg"));
 	}
@@ -276,6 +275,7 @@ implements SpeechletV2
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
+			selectQuestion();
 			res = askUserResponse(question);
 		}; break;
 		default: {
