@@ -148,7 +148,7 @@ implements SpeechletV2
 			question = rs.getString("SätzeLeicht");
 			ResultSet rs1 = stmt
 					.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
-			sätzeDeutsch = rs1.getString("SätzeLeicht")
+			sätzeDeutsch = rs1.getString("SätzeLeicht");
 			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
@@ -275,12 +275,12 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(question);
+			res = askUserResponse(question+""+sätzeDeutsch);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
 			selectQuestion();
-			res = askUserResponse(question);
+			res = askUserResponse(question+""+sätzeDeutsch);
 		}; break;
 		default: {
 			res = askUserResponse(utterances.get(""));
