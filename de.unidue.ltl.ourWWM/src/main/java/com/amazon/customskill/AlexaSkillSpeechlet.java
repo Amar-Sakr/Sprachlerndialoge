@@ -322,7 +322,6 @@ implements SpeechletV2
 	// Achtung, Reihenfolge ist wichtig!
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
-		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
 		String pattern0 = "\\bnein\\b";
 		String pattern1 = "\\bja\\b";
 		String pattern2 = "What is your Name";
@@ -337,12 +336,11 @@ implements SpeechletV2
 		String pattern11 = "What is your favourite color";
 		String pattern12 = "My favourite color is blue";
 		String pattern13 = "What languages do you speak";
-		String pattern1 = "I am speaking german and englisch";
-		String pattern1 = "Are you sIngle";
-		String pattern1 = "I have to go now, Goodbye";
+		String pattern14 = "I am speaking german and englisch";
+		String pattern15 = "Are you sIngle";
+		String pattern16 = "I have to go now, Goodbye";
 
-		Pattern p = Pattern.compile(pattern);
-		Matcher m = p.matcher(userRequest);
+
 		Pattern p0 = Pattern.compile(pattern0);
 		Matcher m0 = p0.matcher(userRequest);
 		Pattern p1 = Pattern.compile(pattern1);
@@ -355,6 +353,29 @@ implements SpeechletV2
 		Matcher m4 = p4.matcher(userRequest);
 		Pattern p5 = Pattern.compile(pattern5);
 		Matcher m5 = p5.matcher(userRequest);
+		Pattern p6 = Pattern.compile(pattern6);
+		Matcher m6 = p5.matcher(userRequest);
+		Pattern p7 = Pattern.compile(pattern7);
+		Matcher m7 = p5.matcher(userRequest);
+		Pattern p8 = Pattern.compile(pattern8);
+		Matcher m8 = p5.matcher(userRequest);
+		Pattern p9 = Pattern.compile(pattern9);
+		Matcher m9 = p5.matcher(userRequest);
+		Pattern p10 = Pattern.compile(pattern10);
+		Matcher m10 = p5.matcher(userRequest);
+		Pattern p11 = Pattern.compile(pattern11);
+		Matcher m11 = p5.matcher(userRequest);
+		Pattern p12 = Pattern.compile(pattern12);
+		Matcher m12 = p5.matcher(userRequest);
+		Pattern p13 = Pattern.compile(pattern13);
+		Matcher m13 = p5.matcher(userRequest);
+		Pattern p14 = Pattern.compile(pattern14);
+		Matcher m14 = p5.matcher(userRequest);
+		Pattern p15 = Pattern.compile(pattern15);
+		Matcher m15 = p5.matcher(userRequest);
+		Pattern p16 = Pattern.compile(pattern16);
+		Matcher m16 = p5.matcher(userRequest);
+		
 		if (m.find()) {
 			String answer = m.group(3);
 			switch (answer) {
