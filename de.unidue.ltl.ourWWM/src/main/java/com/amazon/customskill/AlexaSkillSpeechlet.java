@@ -148,7 +148,7 @@ implements SpeechletV2
 			question = rs.getString("SätzeLeicht");
 			ResultSet rs1 = stmt
 					.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
-			sätzeDeutsch = rs.getString("SätzeLeicht")
+			sätzeDeutsch = rs1.getString("SätzeLeicht")
 			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
