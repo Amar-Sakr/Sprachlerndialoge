@@ -153,7 +153,7 @@ implements SpeechletV2
 		}
 	}
 		
-/// test
+
 
 	// Hier gehen wir rein, wenn der User etwas gesagt hat
 	// Wir speichern den String in userRequest, je nach recognition State reagiert das System unterschiedlich
