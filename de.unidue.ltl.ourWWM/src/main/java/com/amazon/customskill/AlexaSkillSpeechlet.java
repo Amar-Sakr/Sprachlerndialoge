@@ -146,6 +146,9 @@ implements SpeechletV2
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
 			question = rs.getString("SätzeLeicht");
+			ResultSet rs1 = stmt
+					.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
+			sätzeDeutsch = rs.getString("SätzeLeicht")
 			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
