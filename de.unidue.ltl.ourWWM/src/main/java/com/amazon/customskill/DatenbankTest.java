@@ -20,9 +20,9 @@ public class DatenbankTest {
 			con = DBConnection.getConnection();
 			stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM Fragen WHERE Gewinnsumme=" + 125000 + "");
-			String question = rs.getString("Frage");
-			String correctAnswer = rs.getString("RichtigeAntwort");
+					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=");
+			String question = rs.getString("SätzeLeicht");
+			String correctAnswer = rs.getString("Englisch");
 			System.out.println(question+"\t"+correctAnswer);
 		} catch (Exception e){
 			e.printStackTrace();
@@ -31,3 +31,4 @@ public class DatenbankTest {
 
 
 }
+/// "SELECT * FROM Fragen WHERE Gewinnsumme=" + 125000 + "");
