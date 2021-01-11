@@ -63,7 +63,7 @@ implements SpeechletV2
 	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
-	
+	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 
 	// Was der User gesagt hat
 	public static String userRequest;
@@ -183,10 +183,25 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
 		case Yes: {
-			selectQuestion();
-			res = askUserResponse(question+""+sätzeDeutsch); break;
+			if(quit==1) {
+				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
+			}
+			else {
+				selectQuestion();
+				res = askUserResponse(question+""+sätzeDeutsch);
+			}break;
 		} case No: {
-			res = tellUserAndFinish(utterances.get("sumMsg")+" "+utterances.get("goodbyeMsg")); break;
+			if(quit==0) {
+				quit=1;
+				recState = RecognitionState.YesNo;
+				res=askUserResponse("Do you want to quit?");
+			}
+			else {
+				quit=0;
+				recState = RecognitionState.Difficulty;
+				res = askUserResponse("Ok, what difficulty do you want to try?"); break;
+			}
+			
 		} default: {
 			res = askUserResponse(utterances.get(""));
 		}
@@ -260,7 +275,7 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(buildString(question,"total",sätzeDeutsch));
+			res = askUserResponse(question);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;

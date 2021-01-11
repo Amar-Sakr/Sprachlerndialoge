@@ -17,7 +17,7 @@ public class DatenbankTest {
 		System.out.println(DatenbankTest.class.getClassLoader().getResource("utterances.txt").toURI());
 		
 		try {
-			con = DBConnection.getConnection();
+			con = DBConnection.getConnection1();
 			stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=");
