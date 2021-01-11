@@ -107,6 +107,7 @@ implements SpeechletV2
 
 	// Datenbank f√ºr Quizfragen
 	static String DBName = "AlexaBeispiel.db";
+	static String DBName1 = "S‰tze.db";
 	private static Connection con = null;
 
 
