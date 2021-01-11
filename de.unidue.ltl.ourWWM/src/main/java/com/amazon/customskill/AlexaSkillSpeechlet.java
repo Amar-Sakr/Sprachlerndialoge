@@ -258,7 +258,7 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(question+""+sätzeDeutsch);
+			res = askUserResponse(question+"total"+sätzeDeutsch);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
