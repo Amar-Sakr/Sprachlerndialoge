@@ -136,7 +136,7 @@ implements SpeechletV2
 	// Ziehe eine Frage aus der Datenbank, abh√§ngig von der aktuellen Gewinnsumme, setze question und correctAnswer
 	private void selectQuestion() {
 		try {
-			con = DBConnection.getConnection();
+			con = DBConnection.getConnection1();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM S‰tzeLeicht WHERE Englisch=" +  "");
