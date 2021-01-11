@@ -109,7 +109,7 @@ implements SpeechletV2
 	static String DBName = "AlexaBeispiel.db";
 	static String DBName1 = "S�tze.db";
 	private static Connection con = null;
-//test
+
 
 	// Vorgegebene Methode wird am Anfang einmal ausgeführt, wenn ein neuer Dialog startet:
 	// * lies Nutzeräußerungen ein
