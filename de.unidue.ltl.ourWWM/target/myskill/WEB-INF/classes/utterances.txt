@@ -1,4 +1,4 @@
-welcomeMsg = Hallo was geht.
+welcomeMsg = Hello, how are you?
 gamemodeMsg = Und welchen Modus möchtest du spielen? Sätze oder Dialoge?
 wrongMsg = Das ist leider falsch.
 correctMsg = Das ist richtig
