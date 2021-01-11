@@ -254,6 +254,7 @@ implements SpeechletV2
 	private SpeechletResponse evaluateGamemode(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
+		logger.info("Gamemode");
 		switch (ourUserIntent) {
 		case Sätze:{
 			gameMode = 1;
