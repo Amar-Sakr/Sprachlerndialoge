@@ -203,7 +203,7 @@ implements SpeechletV2
 			}
 			
 		} default: {
-			res = askUserResponse(utterances.get(""));
+			res = askUserResponse(utterances.get("")); 
 		}
 		}
 		return res;
