@@ -134,7 +134,7 @@ implements SpeechletV2
 		return askUserResponse(utterances.get("welcomeMsg"));
 	}
 
-	// Ziehe eine Frage aus der Datenbank, abhängig von der aktuellen Gewinnsumme, setze question und correctAnswer
+	// Ziehe eine Frage aus der Datenbank.
 	private void selectQuestion() {
 		try {
 			con = DBConnection.getConnection1();
@@ -177,7 +177,7 @@ implements SpeechletV2
 
 	// Ja/Nein-Fragen kommen genau dann vor, wenn wir wissen wollen, ob der User weitermachen will.
 	// Wenn Ja, stelle die nächste Frage
-	// Wenn Nein, nenne die Gewinnsumme und verabschiede den user
+	// Wenn Nein, verabschiede den user
 	private SpeechletResponse evaluateYesNo(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
