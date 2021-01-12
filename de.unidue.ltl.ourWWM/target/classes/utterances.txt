@@ -1,4 +1,4 @@
-welcomeMsg = Hello, welcome to the language assistance. We have many things prepared for you, but first, what difficulty do you want to try?
+welcomeMsg = Hello, welcome to the language assistance. We have many things prepared for you, but first, what difficulty do you want to try? Easy or difficult?
 gamemodeMsg = And what game mode do you want to play? Learning sentences or trying them out in dialogues?
 wrongMsg = Sorry that is wrong.
 correctMsg = That is correct
