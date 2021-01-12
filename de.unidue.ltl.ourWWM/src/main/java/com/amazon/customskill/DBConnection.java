@@ -9,6 +9,9 @@ public class DBConnection {
 	private static Connection con = null;
 	static String DBName1 = "Sätze.db";
 	private static Connection con1 = null;
+//	static String DB_Dialoge = "Dialoge.db";
+//	private static Connection con2 = null;
+	
 /*
  * establishing the connection with the SQLite database 
  * */
@@ -46,7 +49,24 @@ public class DBConnection {
 		}
 		return con1;
 	}
-
+/*	
+	public static Connection getConnection2() {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			try {
+				con2 = DriverManager.getConnection("jdbc:sqlite::resource:" + 
+				           DBConnection.class.getClassLoader().getResource(DB_Dialoge));
+				} catch (SQLException ex) {
+				System.out.println("Failed to create the database connection.");
+				ex.printStackTrace();
+			}
+		} catch (ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		return con2;
+	}
+*/
+	
 }
 
 

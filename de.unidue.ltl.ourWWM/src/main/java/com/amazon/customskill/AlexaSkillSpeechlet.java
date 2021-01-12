@@ -108,6 +108,7 @@ implements SpeechletV2
 	// Datenbank f√ºr Quizfragen
 	static String DBName = "AlexaBeispiel.db";
 	static String DBName1 = "S‰tze.db";
+//	static String DB_Dialoge = "Dialoge.db";
 	private static Connection con = null;
 
 
@@ -136,6 +137,8 @@ implements SpeechletV2
 
 	// Ziehe eine Frage aus der Datenbank.
 	private void selectQuestion() {
+//		if(gameMode==1) {
+		
 		try {
 			con = DBConnection.getConnection1();
 			Statement stmt = con.createStatement();
@@ -148,8 +151,21 @@ implements SpeechletV2
 			correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
-			e.printStackTrace();
+			e.printStackTrace();}
+//		}
+/*		
+		else if(gameMode==2){
+		try {
+			con = DBConnection.getConnection2();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM DialogeLeicht WHERE Alexa=" +  "");
+			question = rs.getString("DialogeLeicht");
+			logger.info("Extracted question from database "+ question);
+		} catch (Exception e){
+			e.printStackTrace();}
 		}
+*/			
 	}
 		
 
@@ -237,6 +253,7 @@ implements SpeechletV2
 			//}
 		//}
 		//}
+//		if(gameMode==1) {
 		if(userRequest==correctAnswer) {
 			logger.info("User answer recognized as correct.");
 			recState = RecognitionState.YesNo;
@@ -245,7 +262,18 @@ implements SpeechletV2
 		else {
 			res = askUserResponse(utterances.get("wrongMsg")+""+question+""+s‰tzeDeutsch);
 		}
+//		}
 		
+/*		else if(gameMode==2) {
+			logger.info("User answer recognized as correct.");
+			if(question=="Thats what I thought. I learned alot of you. Thank you for answering my questions. I have to go now. Have a good day?"){
+				quit=1;
+				res = askUserResponse(utterances.get("dialogeFinishing")+" "+utterances.get("continueMsg"));
+			}
+
+			
+		}
+*/		
 		return res;
 	}
 	private SpeechletResponse evaluateDiff(String userRequest) {
@@ -280,7 +308,7 @@ implements SpeechletV2
 		case Dialoge:{
 			gameMode = 2;
 			selectQuestion();
-			res = askUserResponse(buildString(question,"",s‰tzeDeutsch));
+			res = askUserResponse(buildString(question,"",s‰tzeDeutsch));  //wir brauchen s‰tzeDeutsch nicht 
 		}; break;
 		default: {
 			res = askUserResponse(utterances.get(""));

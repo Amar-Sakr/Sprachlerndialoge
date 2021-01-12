@@ -6,3 +6,4 @@ continueMsg = Do you want to continue?
 goodbyeMsg = Good Bye.
 errorYesNoMsg = Sorry I did not understand that. Please say yes or no.
 errorAnswerMsg = I am sorry, but I did not understand that. Please try again.
+dialogeFinishing = now, we are finished with this conversation.
