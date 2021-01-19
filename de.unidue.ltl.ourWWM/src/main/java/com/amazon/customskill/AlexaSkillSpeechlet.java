@@ -63,6 +63,7 @@ implements SpeechletV2
 	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
+	static int id; // the line id in the database
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 
 	// Was der User gesagt hat
@@ -108,7 +109,7 @@ implements SpeechletV2
 	// Datenbank fÃ¼r Quizfragen
 	static String DBName = "AlexaBeispiel.db";
 	static String DBName1 = "Sätze.db";
-//	static String DB_Dialoge = "Dialoge.db";
+	static String DB_Dialoge = "Dialoge.db";
 	private static Connection con = null;
 
 
@@ -137,7 +138,7 @@ implements SpeechletV2
 
 	// Ziehe eine Frage aus der Datenbank.
 	private void selectQuestion() {
-//		if(gameMode==1) {
+		if(gameMode==1) {
 		
 		try {
 			con = DBConnection.getConnection1();
@@ -152,8 +153,8 @@ implements SpeechletV2
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();}
-//		}
-/*		
+		}
+		
 		else if(gameMode==2){
 		try {
 			con = DBConnection.getConnection2();
@@ -161,11 +162,14 @@ implements SpeechletV2
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM DialogeLeicht WHERE Alexa=" +  "");
 			question = rs.getString("DialogeLeicht");
+			ResultSet rs1 = stmt
+					.executeQuery("SELECT * FROM DialogeLeicht WHERE ID=" +  "");
+			id = rs1.getInt("ID");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();}
 		}
-*/			
+			
 	}
 		
 
@@ -253,7 +257,7 @@ implements SpeechletV2
 			//}
 		//}
 		//}
-//		if(gameMode==1) {
+		if(gameMode==1) {
 		if(userRequest==correctAnswer) {
 			logger.info("User answer recognized as correct.");
 			recState = RecognitionState.YesNo;
@@ -262,18 +266,24 @@ implements SpeechletV2
 		else {
 			res = askUserResponse(utterances.get("wrongMsg")+""+question+""+sätzeDeutsch);
 		}
-//		}
+		}
 		
-/*		else if(gameMode==2) {
+		else if(gameMode==2) {
+			// we have to define the correct answer
+			if(userRequest==correctAnswer) {
 			logger.info("User answer recognized as correct.");
-			if(question=="Thats what I thought. I learned alot of you. Thank you for answering my questions. I have to go now. Have a good day?"){
+			if(id==10){
 				quit=1;
 				res = askUserResponse(utterances.get("dialogeFinishing")+" "+utterances.get("continueMsg"));
 			}
+		}
+		else {
+			res = askUserResponse(utterances.get("wrongMsg")+""+question);
+		}
 
 			
 		}
-*/		
+		
 		return res;
 	}
 	private SpeechletResponse evaluateDiff(String userRequest) {
@@ -341,6 +351,14 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
+//		String pattern18 = "(my name is | i am)";
+//		String pattern19 = "(i am)?(come)?(from)";
+//		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
+//		String pattern21 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
+//		String pattern22 = "(my favourite color is | i like)";
+//		String pattern23 = "(i (am)? speak(ing)?| i can speak)";
+//		String pattern24 = "(you too| thanks |thank you)";
+		
 
 
 		Pattern p = Pattern.compile(pattern);
@@ -381,6 +399,22 @@ implements SpeechletV2
 		Matcher m16 = p16.matcher(userRequest);
 		Pattern p17 = Pattern.compile(pattern17);
 		Matcher m17 = p17.matcher(userRequest);
+//		Pattern p18 = Pattern.compile(pattern18);
+//		Matcher m18 = p17.matcher(userRequest);
+//		Pattern p19 = Pattern.compile(pattern19);
+//		Matcher m19 = p17.matcher(userRequest);
+//		Pattern p20 = Pattern.compile(pattern20);
+//		Matcher m20 = p17.matcher(userRequest);
+//		Pattern p21 = Pattern.compile(pattern21);
+//		Matcher m21 = p17.matcher(userRequest);
+//		Pattern p22 = Pattern.compile(pattern22);
+//		Matcher m22 = p17.matcher(userRequest);
+//		Pattern p23 = Pattern.compile(pattern23);
+//		Matcher m23 = p17.matcher(userRequest);
+//		Pattern p24 = Pattern.compile(pattern24);
+//		Matcher m24 = p17.matcher(userRequest);
+		
+		
 		
 		if (m.find()) {
 			String answer = m.group(3);
