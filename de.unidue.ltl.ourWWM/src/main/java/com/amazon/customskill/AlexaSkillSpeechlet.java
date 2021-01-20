@@ -351,8 +351,8 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
-//		String pattern18 = "(my name is | i am)";
-//		String pattern19 = "(i am)?(come)?(from)";
+//		String pattern18 = "(my name is) | (i am)"; --> keinen plan ob das so stimmt
+//		String pattern19 = "?(i am|i come)?(from)";
 //		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
 //		String pattern21 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
 //		String pattern22 = "(my favourite color is | i like)";
