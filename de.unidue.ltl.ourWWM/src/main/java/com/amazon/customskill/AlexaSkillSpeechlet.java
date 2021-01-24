@@ -155,7 +155,7 @@ implements SpeechletV2
 			logger.info("sätzedeutsch filled");
 			correctAnswer = rs.getString("Englisch");
 			logger.info("correct answer set");
-			logger.info("Extracted question from database "+ question);
+			logger.info("Extracted question from database: "+ question);
 		} catch (Exception e){
 			logger.info("Exception");
 			e.printStackTrace();}
@@ -189,7 +189,7 @@ implements SpeechletV2
 		Intent intent = request.getIntent();
 		userRequest = intent.getSlot("anything").getValue();
 		logger.info("Received following text: [" + userRequest + "]");
-		logger.info("recState is [" + recState + "]");
+		logger.info("recState is: "+ recState +"]");
 		SpeechletResponse resp = null;
 		switch (recState) {
 		case Answer: resp = evaluateAnswer(userRequest); break;
@@ -270,7 +270,7 @@ implements SpeechletV2
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 		}
 		else {
-			res = askUserResponse(utterances.get("wrongMsg")+""+question+""+sätzeDeutsch);
+			res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
 		}
 		}
 		
@@ -319,7 +319,7 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(question+sätzeDeutsch);
+			res = askUserResponse(utterances.get("sentenceMsg")+question+" "+sätzeDeutsch);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
