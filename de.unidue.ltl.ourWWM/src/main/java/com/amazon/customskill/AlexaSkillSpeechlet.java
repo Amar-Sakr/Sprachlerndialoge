@@ -142,16 +142,22 @@ implements SpeechletV2
 		
 		try {
 			con = DBConnection.getConnection1();
+			logger.info("con");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
+			logger.info("statement");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
+			logger.info("resultSet Saätze Englisch");
 			question = rs.getString("SätzeLeicht");
-			ResultSet rs1 = stmt
-					.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
+			logger.info("question filled");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
+			logger.info("resultSet Sätze Deutsch");
 			sätzeDeutsch = rs1.getString("SätzeLeicht");
+			logger.info("sätzedeutsch filled");
 			correctAnswer = rs.getString("Englisch");
+			logger.info("correct answer set");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
+			logger.info("Exception");
 			e.printStackTrace();}
 		}
 		
