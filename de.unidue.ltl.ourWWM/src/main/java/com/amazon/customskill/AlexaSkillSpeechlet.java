@@ -145,13 +145,13 @@ implements SpeechletV2
 			logger.info("con");
 			Statement stmt = con.createStatement();
 			logger.info("statement");
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE Englisch=" +  "");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			logger.info("resultSet Saätze Englisch");
-			question = rs.getString("SätzeLeicht");
+			question = rs.getString("Englisch");
 			logger.info("question filled");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE Deutsch=" +  "");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			logger.info("resultSet Sätze Deutsch");
-			sätzeDeutsch = rs1.getString("SätzeLeicht");
+			sätzeDeutsch = rs1.getString("Deutsch");
 			logger.info("sätzedeutsch filled");
 			correctAnswer = rs.getString("Englisch");
 			logger.info("correct answer set");
