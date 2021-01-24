@@ -166,10 +166,10 @@ implements SpeechletV2
 			con = DBConnection.getConnection2();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM DialogeLeicht WHERE Alexa=" +  "");
-			question = rs.getString("DialogeLeicht");
+					.executeQuery("SELECT * FROM DialogeLeicht");
+			question = rs.getString("Alexa");
 			ResultSet rs1 = stmt
-					.executeQuery("SELECT * FROM DialogeLeicht WHERE ID=" +  "");
+					.executeQuery("SELECT * FROM DialogeLeicht");
 			id = rs1.getInt("ID");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
