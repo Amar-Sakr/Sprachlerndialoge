@@ -351,7 +351,7 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
-//		String pattern18 = "(my name is) | (i am)"; --> keinen plan ob das so stimmt
+//		String pattern18 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
 //		String pattern19 = "?(i am|i come)?(from)";
 //		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
 //		String pattern21 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
@@ -450,7 +450,14 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.Error;
 		}
 		logger.info("set ourUserIntent to " +ourUserIntent);
+		
+		// define the correct answer
+/*		if (m18.find()||m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()) {
+			correctAnswer=userRequest;
+			}
+*/	
 	}
+	
 
 
 	
