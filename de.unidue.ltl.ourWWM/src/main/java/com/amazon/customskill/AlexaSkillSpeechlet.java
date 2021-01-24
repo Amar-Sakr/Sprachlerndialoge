@@ -264,7 +264,7 @@ implements SpeechletV2
 		//}
 		//}
 		if(gameMode==1) {
-		if(userRequest==correctAnswer) {
+		if(userRequest==question) {
 			logger.info("User answer recognized as correct.");
 			recState = RecognitionState.YesNo;
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
@@ -319,7 +319,7 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
-			res = askUserResponse(question);
+			res = askUserResponse(question+sätzeDeutsch);
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
