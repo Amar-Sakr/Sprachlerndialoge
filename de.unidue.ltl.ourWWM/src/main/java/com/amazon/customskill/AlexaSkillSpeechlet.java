@@ -264,7 +264,7 @@ implements SpeechletV2
 		//}
 		//}
 		if(gameMode==1) {
-		if(userRequest==question) {
+		if(userRequest.equals(question)) {
 			logger.info("User answer recognized as correct.");
 			recState = RecognitionState.YesNo;
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
