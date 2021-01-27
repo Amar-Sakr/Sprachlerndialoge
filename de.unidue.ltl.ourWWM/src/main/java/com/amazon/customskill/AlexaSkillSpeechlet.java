@@ -145,11 +145,11 @@ implements SpeechletV2
 			logger.info("con");
 			Statement stmt = con.createStatement();
 			logger.info("statement");
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=2");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=id");
 			logger.info("resultSet Saätze Englisch");
 			question = rs.getString("Englisch");
 			logger.info("question filled");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=2");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=id");
 			logger.info("resultSet Sätze Deutsch");
 			sätzeDeutsch = rs1.getString("Deutsch");
 			logger.info("sätzedeutsch filled");
@@ -196,7 +196,7 @@ implements SpeechletV2
 		case YesNo: resp = evaluateYesNo(userRequest); recState = RecognitionState.Answer; break;
 		case Difficulty: resp = evaluateDiff(userRequest); recState = RecognitionState.Gamemode; break;
 		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Answer; break;
-		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);
+		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);break;
 		}   
 		return resp;
 	}
@@ -211,26 +211,30 @@ implements SpeechletV2
 		case Yes: {
 			if(quit==1) {
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
+				break;
 			}
 			else {
-				
 				selectQuestion();
 				res = askUserResponse(question+""+sätzeDeutsch);
-			}break;
+				break;
+			}
 		} case No: {
 			if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
 				res=askUserResponse("Do you want to quit?");
+				break;
 			}
 			else {
 				quit=0;
 				recState = RecognitionState.Difficulty;
-				res = askUserResponse("Ok, what difficulty do you want to try?"); break;
+				res = askUserResponse("Ok, what difficulty do you want to try?"); 
+				break;
 			}
 			
 		} default: {
 			res = askUserResponse(utterances.get("")); 
+			break;
 		}
 		}
 		return res;
@@ -267,6 +271,7 @@ implements SpeechletV2
 		if(gameMode==1) {
 		if(userRequest.equals(question)) {
 			logger.info("User answer recognized as correct.");
+			id++;
 			recState = RecognitionState.YesNo;
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 		}
@@ -449,9 +454,9 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.Publikum;
 		} else if (m3.find()) {
 			ourUserIntent = UserIntent.FiftyFifty;
-		} else if (m4.find()) {
+		} else if (m16.find()) {
 			ourUserIntent = UserIntent.No;
-		} else if (m5.find()) {
+		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
 		} else {
 			ourUserIntent = UserIntent.Error;
