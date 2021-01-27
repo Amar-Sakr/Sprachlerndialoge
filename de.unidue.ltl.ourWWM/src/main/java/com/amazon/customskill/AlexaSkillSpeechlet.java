@@ -63,7 +63,7 @@ implements SpeechletV2
 	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
-	static int id; // the line id in the database
+	static int id = 1; // the line id in the database
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 
 	// Was der User gesagt hat
@@ -145,11 +145,11 @@ implements SpeechletV2
 			logger.info("con");
 			Statement stmt = con.createStatement();
 			logger.info("statement");
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=2");
 			logger.info("resultSet Saätze Englisch");
 			question = rs.getString("Englisch");
 			logger.info("question filled");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=2");
 			logger.info("resultSet Sätze Deutsch");
 			sätzeDeutsch = rs1.getString("Deutsch");
 			logger.info("sätzedeutsch filled");
@@ -213,6 +213,7 @@ implements SpeechletV2
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
 			}
 			else {
+				
 				selectQuestion();
 				res = askUserResponse(question+""+sätzeDeutsch);
 			}break;
@@ -270,7 +271,7 @@ implements SpeechletV2
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 		}
 		else {
-			res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
+			res = askUserResponse(utterances.get("wrongMsg")+" "+question+"."+sätzeDeutsch);
 		}
 		}
 		
