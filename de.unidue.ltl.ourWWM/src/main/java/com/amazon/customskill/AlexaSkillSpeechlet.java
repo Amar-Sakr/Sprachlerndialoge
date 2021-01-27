@@ -63,7 +63,7 @@ implements SpeechletV2
 	static String sätzeDeutsch = "";
 	static int diff;
 	static int gameMode;
-	static int id = 1; // the line id in the database
+	static int count = 1; // the line id in the database
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 
 	// Was der User gesagt hat
@@ -142,19 +142,17 @@ implements SpeechletV2
 		
 		try {
 			con = DBConnection.getConnection1();
-			logger.info("con");
 			Statement stmt = con.createStatement();
-			logger.info("statement");
-			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=id");
-			logger.info("resultSet Saätze Englisch");
-			question = rs.getString("Englisch");
-			logger.info("question filled");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht WHERE ID=id");
-			logger.info("resultSet Sätze Deutsch");
+			logger.info("ID: "+count);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
+			for (int i=1; i<count;i++) {
+				rs.next();
+				rs1.next();
+			}
 			sätzeDeutsch = rs1.getString("Deutsch");
-			logger.info("sätzedeutsch filled");
-			correctAnswer = rs.getString("Englisch");
-			logger.info("correct answer set");
+			question = rs.getString("Englisch");
+			//correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database: "+ question);
 		} catch (Exception e){
 			logger.info("Exception");
@@ -271,7 +269,7 @@ implements SpeechletV2
 		if(gameMode==1) {
 		if(userRequest.equals(question)) {
 			logger.info("User answer recognized as correct.");
-			id++;
+			count+=1;
 			recState = RecognitionState.YesNo;
 			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
 		}
@@ -284,7 +282,7 @@ implements SpeechletV2
 			// we have to define the correct answer
 			if(userRequest==correctAnswer) {
 			logger.info("User answer recognized as correct.");
-			if(id==10){
+			if(count==10){
 				quit=1;
 				res = askUserResponse(utterances.get("dialogeFinishing")+" "+utterances.get("continueMsg"));
 			}
