@@ -74,7 +74,7 @@ implements SpeechletV2
 	RecognitionState recState;
 
 	// Was hat der User grade gesagt. (Die "Semantic Tags"aus DialogOS)
-	static enum UserIntent {Yes, No, A, B, C, D, Publikum, FiftyFifty, Error, Leicht, Schwer, Dialoge, Sätze};
+	static enum UserIntent {Yes, No, Correct, Wrong, Error, Leicht, Schwer, Dialoge, Sätze};
 	UserIntent ourUserIntent;
 
 	// Was das System sagen kann
@@ -158,7 +158,7 @@ implements SpeechletV2
 			logger.info("Exception");
 			e.printStackTrace();}
 		}
-		
+		//noch nicht korrekt
 		else if(gameMode==2){
 		try {
 			con = DBConnection.getConnection2();
@@ -168,7 +168,7 @@ implements SpeechletV2
 			question = rs.getString("Alexa");
 			ResultSet rs1 = stmt
 					.executeQuery("SELECT * FROM DialogeLeicht");
-			id = rs1.getInt("ID");
+			count = rs1.getInt("ID");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();}
@@ -279,19 +279,23 @@ implements SpeechletV2
 		}
 		
 		else if(gameMode==2) {
-			// we have to define the correct answer
-			if(userRequest==correctAnswer) {
-			logger.info("User answer recognized as correct.");
-			if(count==10){
-				quit=1;
-				res = askUserResponse(utterances.get("dialogeFinishing")+" "+utterances.get("continueMsg"));
+			logger.info("User Intent: "+ourUserIntent);
+			switch(ourUserIntent) {
+			case Correct:{
+				logger.info("User answer recognized as correct.");
+				recState = RecognitionState.YesNo;
+				res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+				break;
 			}
-		}
-		else {
-			res = askUserResponse(utterances.get("wrongMsg")+""+question);
-		}
-
-			
+			case Wrong:{
+				res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
+				break;
+			}
+			default:{
+				res = askUserResponse(utterances.get("errorMsg"));
+				break;
+			}
+			}
 		}
 		
 		return res;
@@ -439,20 +443,7 @@ implements SpeechletV2
 			case "sentences": ourUserIntent = UserIntent.Sätze; break;
 			case "dialogues": ourUserIntent = UserIntent.Dialoge; break;
 			}
-		}
-		else if (m1.find()) {
-			String answer = m1.group(3);
-			switch (answer) {
-			case "a": ourUserIntent = UserIntent.A; break;
-			case "b": ourUserIntent = UserIntent.B; break;
-			case "c": ourUserIntent = UserIntent.C; break;
-			case "d": ourUserIntent = UserIntent.D; break;
-			}
-		} else if (m2.find()) {
-			ourUserIntent = UserIntent.Publikum;
-		} else if (m3.find()) {
-			ourUserIntent = UserIntent.FiftyFifty;
-		} else if (m16.find()) {
+		}else if (m16.find()) {
 			ourUserIntent = UserIntent.No;
 		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
