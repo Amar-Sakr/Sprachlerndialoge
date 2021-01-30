@@ -65,6 +65,7 @@ implements SpeechletV2
 	static int gameMode;
 	static int count = 1; // the line id in the database
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
+	static int famCheck = 0;
 
 	// Was der User gesagt hat
 	public static String userRequest;
@@ -134,6 +135,8 @@ implements SpeechletV2
 		logger.info("onLaunch");
 		recState = RecognitionState.Difficulty;
 		return askUserResponse(utterances.get("welcomeMsg"));
+//		recState = RecognitionState.YesNo;
+//		return askUserResponse(utterances.get("famCheck"));	
 	}
 
 	// Ziehe eine Frage aus der Datenbank.
@@ -207,7 +210,14 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
 		case Yes: {
-			if(quit==1) {
+/*			if(famCheck==0) {
+			    famCheck=1;
+			    recState = RecognitionState.Difficulty;
+			    res = tellUserAndFinish(utterances.get("familiarUserMsg"));
+			    logger.info("familiarUserMsg");
+			break;
+			}
+			else*/ if(quit==1) {
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
 				break;
 			}
@@ -218,7 +228,14 @@ implements SpeechletV2
 				break;
 			}
 		} case No: {
-			if(quit==0) {
+/*			if(famCheck==0) {
+			    famCheck=1;
+			    recState = RecognitionState.Difficulty;
+			    res = tellUserAndFinish(utterances.get("welcomeMsg"));
+			    logger.info("welcomeMsg");
+			break;
+			}
+			else*/ if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
 				res=askUserResponse("Do you want to quit?");
