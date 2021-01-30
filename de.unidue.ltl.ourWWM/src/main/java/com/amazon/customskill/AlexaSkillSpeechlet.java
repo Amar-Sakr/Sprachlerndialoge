@@ -191,7 +191,7 @@ implements SpeechletV2
 		SpeechletResponse resp = null;
 		switch (recState) {
 		case Answer: resp = evaluateAnswer(userRequest); break;
-		case YesNo: resp = evaluateYesNo(userRequest); recState = RecognitionState.Answer; break;
+		case YesNo: resp = evaluateYesNo(userRequest); break;
 		case Difficulty: resp = evaluateDiff(userRequest); recState = RecognitionState.Gamemode; break;
 		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Answer; break;
 		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);break;
@@ -212,6 +212,7 @@ implements SpeechletV2
 				break;
 			}
 			else {
+				recState = RecognitionState.Answer;
 				selectQuestion();
 				res = askUserResponse(question+""+sätzeDeutsch);
 				break;
@@ -267,17 +268,24 @@ implements SpeechletV2
 		//}
 		//}
 		if(gameMode==1) {
-		if(userRequest.equals(question)) {
-			logger.info("User answer recognized as correct.");
-			count+=1;
-			recState = RecognitionState.YesNo;
-			res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+			if(userRequest.equals(question)) {
+				logger.info("User answer recognized as correct.");
+				count+=1;
+				
+				if(count % 3 == 0) {
+					recState = RecognitionState.YesNo;
+					res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+				}
+				else {
+					recState = RecognitionState.Answer;
+					selectQuestion();
+					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
+				}
+			}
+			else {
+				res = askUserResponse(utterances.get("wrongMsg")+" "+question+" "+sätzeDeutsch);
+			}
 		}
-		else {
-			res = askUserResponse(utterances.get("wrongMsg")+" "+question+"."+sätzeDeutsch);
-		}
-		}
-		
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
 			switch(ourUserIntent) {
@@ -479,6 +487,8 @@ implements SpeechletV2
 	 */
 	private SpeechletResponse tellUserAndFinish(String text)
 	{
+		quit = 0;
+		count = 1;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
