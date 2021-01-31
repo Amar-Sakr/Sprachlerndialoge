@@ -133,10 +133,11 @@ implements SpeechletV2
 	public SpeechletResponse onLaunch(SpeechletRequestEnvelope<LaunchRequest> requestEnvelope)
 	{
 		logger.info("onLaunch");
-//		recState = RecognitionState.Difficulty;
-//		return askUserResponse(utterances.get("welcomeMsg"));
 		recState = RecognitionState.YesNo;
 		return askUserResponse(utterances.get("famCheck"));	
+		/*recState = RecognitionState.Difficulty;
+		return askUserResponse(utterances.get("welcomeMsg"));
+		*/
 	}
 
 	// Ziehe eine Frage aus der Datenbank.
@@ -213,7 +214,7 @@ implements SpeechletV2
 			if(famCheck==0) {
 			    famCheck=1;
 			    recState = RecognitionState.Difficulty;
-			    res = tellUserAndFinish(utterances.get("familiarUserMsg"));
+			    res = askUserResponse(utterances.get("familiarUserMsg"));
 			    logger.info("familiarUserMsg");
 			break;
 			}
@@ -231,7 +232,7 @@ implements SpeechletV2
 			if(famCheck==0) {
 			    famCheck=1;
 			    recState = RecognitionState.Difficulty;
-			    res = tellUserAndFinish(utterances.get("welcomeMsg"));
+			    res = askUserResponse(utterances.get("welcomeMsg"));
 			    logger.info("welcomeMsg");
 			break;
 			}
@@ -289,18 +290,20 @@ implements SpeechletV2
 				logger.info("User answer recognized as correct.");
 				
 				if(count % 3 == 0) {
+					count+=1;
 					recState = RecognitionState.YesNo;
 					res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
-					count+=1;
+					
 				}
 				else {
+					count+=1;
 					recState = RecognitionState.Answer;
 					selectQuestion();
 					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
-					count+=1;
+					
 				}
 			}
-			else if(ourUserIntent==UserIntent.Stop) {
+			else if(ourUserIntent.equals(UserIntent.Stop)) {
 				logger.info("geht ind den evaluateAnswer Block");
 				recState = RecognitionState.YesNo;
 				logger.info("recState YesNo");
@@ -308,7 +311,7 @@ implements SpeechletV2
 				res = askUserResponse("Do you want to quit?");
 			}
 			else {
-				res = askUserResponse(utterances.get("wrongMsg")+" "+question+" "+sätzeDeutsch);
+				res = askUserResponse(utterances.get("errorMsg")+" "+question+" "+sätzeDeutsch);
 			}
 		}
 		else if(gameMode==2) {
