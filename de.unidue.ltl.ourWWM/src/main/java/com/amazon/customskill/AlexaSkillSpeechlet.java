@@ -514,6 +514,7 @@ implements SpeechletV2
 	{
 		quit = 0;
 		count = 1;
+		famCheck =0;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
