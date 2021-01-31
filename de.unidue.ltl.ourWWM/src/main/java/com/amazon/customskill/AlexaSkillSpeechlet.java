@@ -401,7 +401,7 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
-		String pattern18 = "stop";
+		String pattern18 = "home menu";
 //		String pattern18 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
 //		String pattern19 = "?(i am|i come)?(from)";
 //		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
