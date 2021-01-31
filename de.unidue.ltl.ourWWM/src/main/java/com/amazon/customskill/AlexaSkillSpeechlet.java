@@ -299,6 +299,11 @@ implements SpeechletV2
 					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
 				}
 			}
+			else if(userRequest.equals("stop")) {
+				recState = RecognitionState.YesNo;
+				quit = 1;
+				res = askUserResponse("Do you want to quit?");
+			}
 			else {
 				res = askUserResponse(utterances.get("wrongMsg")+" "+question+" "+sätzeDeutsch);
 			}
@@ -390,6 +395,7 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
+		String pattern18 = "stop";
 //		String pattern18 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
 //		String pattern19 = "?(i am|i come)?(from)";
 //		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
@@ -438,8 +444,8 @@ implements SpeechletV2
 		Matcher m16 = p16.matcher(userRequest);
 		Pattern p17 = Pattern.compile(pattern17);
 		Matcher m17 = p17.matcher(userRequest);
-//		Pattern p18 = Pattern.compile(pattern18);
-//		Matcher m18 = p17.matcher(userRequest);
+		Pattern p18 = Pattern.compile(pattern18);
+		Matcher m18 = p18.matcher(userRequest);
 //		Pattern p19 = Pattern.compile(pattern19);
 //		Matcher m19 = p17.matcher(userRequest);
 //		Pattern p20 = Pattern.compile(pattern20);
@@ -472,7 +478,9 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.No;
 		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
-		} else {
+		}else if (m18.find()) {
+			tellUserAndFinish(utterances.get("goodbyeMsg"));
+		}else {
 			ourUserIntent = UserIntent.Error;
 		}
 		logger.info("set ourUserIntent to " +ourUserIntent);
