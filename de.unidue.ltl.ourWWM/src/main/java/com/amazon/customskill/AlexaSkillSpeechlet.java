@@ -133,10 +133,10 @@ implements SpeechletV2
 	public SpeechletResponse onLaunch(SpeechletRequestEnvelope<LaunchRequest> requestEnvelope)
 	{
 		logger.info("onLaunch");
-		recState = RecognitionState.Difficulty;
-		return askUserResponse(utterances.get("welcomeMsg"));
-//		recState = RecognitionState.YesNo;
-//		return askUserResponse(utterances.get("famCheck"));	
+//		recState = RecognitionState.Difficulty;
+//		return askUserResponse(utterances.get("welcomeMsg"));
+		recState = RecognitionState.YesNo;
+		return askUserResponse(utterances.get("famCheck"));	
 	}
 
 	// Ziehe eine Frage aus der Datenbank.
@@ -210,14 +210,14 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
 		case Yes: {
-/*			if(famCheck==0) {
+			if(famCheck==0) {
 			    famCheck=1;
 			    recState = RecognitionState.Difficulty;
 			    res = tellUserAndFinish(utterances.get("familiarUserMsg"));
 			    logger.info("familiarUserMsg");
 			break;
 			}
-			else*/ if(quit==1) {
+			else if(quit==1) {
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
 				break;
 			}
@@ -228,14 +228,14 @@ implements SpeechletV2
 				break;
 			}
 		} case No: {
-/*			if(famCheck==0) {
+			if(famCheck==0) {
 			    famCheck=1;
 			    recState = RecognitionState.Difficulty;
 			    res = tellUserAndFinish(utterances.get("welcomeMsg"));
 			    logger.info("welcomeMsg");
 			break;
 			}
-			else*/ if(quit==0) {
+			else if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
 				res=askUserResponse("Do you want to quit?");
