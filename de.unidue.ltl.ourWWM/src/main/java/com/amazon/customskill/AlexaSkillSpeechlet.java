@@ -190,6 +190,7 @@ implements SpeechletV2
 		IntentRequest request = requestEnvelope.getRequest();
 		Intent intent = request.getIntent();
 		userRequest = intent.getSlot("anything").getValue();
+		userRequest = userRequest.toLowerCase();
 		logger.info("Received following text: [" + userRequest + "]");
 		logger.info("recState is: "+ recState +"]");
 		SpeechletResponse resp = null;
@@ -311,7 +312,7 @@ implements SpeechletV2
 				res = askUserResponse("Do you want to quit?");
 			}
 			else {
-				res = askUserResponse(utterances.get("errorMsg")+" "+question+" "+sätzeDeutsch);
+				res = askUserResponse(utterances.get("errorAnswerMsg")+" "+question+" "+sätzeDeutsch);
 			}
 		}
 		else if(gameMode==2) {
@@ -384,10 +385,10 @@ implements SpeechletV2
 		userRequest = userRequest.toLowerCase();
 		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogues)( mode)?( please)?";
-		String pattern1 = "What is your Name";
-		String pattern2 = "My name is Alexa";
-		String pattern3 = "Where are you from";
-		String pattern4 = "I am from Germany";
+		String pattern1 = "what is your name";
+		String pattern2 = "my name is alexa";
+		String pattern3 = "where are you from";
+		String pattern4 = "i am from germany";
 		String pattern5 = "I never went to Germany before";
 		String pattern6 = "What are your hobbies";
 		String pattern7 = "My hobbies are reading and dancing";
@@ -521,9 +522,6 @@ implements SpeechletV2
 	 */
 	private SpeechletResponse tellUserAndFinish(String text)
 	{
-		quit = 0;
-		count = 1;
-		famCheck =0;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
