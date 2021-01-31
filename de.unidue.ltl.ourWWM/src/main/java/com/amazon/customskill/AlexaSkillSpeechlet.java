@@ -508,6 +508,9 @@ implements SpeechletV2
 	@Override
 	public void onSessionEnded(SpeechletRequestEnvelope<SessionEndedRequest> requestEnvelope)
 	{
+		quit = 0;
+		count = 1; 
+		famCheck = 0; 
 		logger.info("Alexa session ends now");
 	}
 
