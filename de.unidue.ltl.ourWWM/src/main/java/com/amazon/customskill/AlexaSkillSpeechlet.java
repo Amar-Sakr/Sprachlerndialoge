@@ -75,7 +75,7 @@ implements SpeechletV2
 	RecognitionState recState;
 
 	// Was hat der User grade gesagt. (Die "Semantic Tags"aus DialogOS)
-	static enum UserIntent {Yes, No, Correct, Wrong, Error, Leicht, Schwer, Dialoge, Sätze};
+	static enum UserIntent {Yes, No, Correct, Wrong, Error, Leicht, Schwer, Dialoge, Sätze, Stop};
 	UserIntent ourUserIntent;
 
 	// Was das System sagen kann
@@ -287,20 +287,23 @@ implements SpeechletV2
 		if(gameMode==1) {
 			if(userRequest.equals(question)) {
 				logger.info("User answer recognized as correct.");
-				count+=1;
 				
 				if(count % 3 == 0) {
 					recState = RecognitionState.YesNo;
 					res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+					count+=1;
 				}
 				else {
 					recState = RecognitionState.Answer;
 					selectQuestion();
 					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
+					count+=1;
 				}
 			}
-			else if(userRequest.equals("stop")) {
+			else if(ourUserIntent==UserIntent.Stop) {
+				logger.info("geht ind den evaluateAnswer Block");
 				recState = RecognitionState.YesNo;
+				logger.info("recState YesNo");
 				quit = 1;
 				res = askUserResponse("Do you want to quit?");
 			}
@@ -391,7 +394,7 @@ implements SpeechletV2
 		String pattern11 = "My favourite color is blue";
 		String pattern12 = "What languages do you speak";
 		String pattern13 = "I am speaking german and englisch";
-		String pattern14 = "Are you sIngle";
+		String pattern14 = "Are you single";
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
@@ -479,7 +482,7 @@ implements SpeechletV2
 		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
 		}else if (m18.find()) {
-			tellUserAndFinish(utterances.get("goodbyeMsg"));
+			ourUserIntent = UserIntent.Stop;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
