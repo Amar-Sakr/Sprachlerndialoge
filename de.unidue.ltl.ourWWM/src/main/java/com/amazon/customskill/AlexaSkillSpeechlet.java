@@ -65,6 +65,7 @@ implements SpeechletV2
 	static int gameMode;
 	static int count = 1; // the line id in the database
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
+	private static boolean isRun = false;
 	static int famCheck = 0;
 
 	// Was der User gesagt hat
@@ -212,8 +213,9 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
 		case Yes: {
-			if(famCheck==0) {
-			    famCheck=1;
+			if(!isRun) {
+				isRun=true;
+			    famCheck=1; // means familiar user
 			    recState = RecognitionState.Difficulty;
 			    res = askUserResponse(utterances.get("familiarUserMsg"));
 			    logger.info("familiarUserMsg");
@@ -230,8 +232,8 @@ implements SpeechletV2
 				break;
 			}
 		} case No: {
-			if(famCheck==0) {
-			    famCheck=1;
+			if(!isRun) {
+				isRun=true;
 			    recState = RecognitionState.Difficulty;
 			    res = askUserResponse(utterances.get("welcomeMsg"));
 			    logger.info("welcomeMsg");
@@ -364,7 +366,11 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
+			if(famCheck==1) {
+				res = askUserResponse(utterances.get("famSentenceMsg")+question+" "+sätzeDeutsch);	
+			}else {
 			res = askUserResponse(utterances.get("sentenceMsg")+question+" "+sätzeDeutsch);
+			}
 		}; break;
 		case Dialoge:{
 			gameMode = 2;
@@ -511,7 +517,8 @@ implements SpeechletV2
 	{
 		quit = 0;
 		count = 1; 
-		famCheck = 0; 
+		famCheck = 0;
+		isRun = false;
 		logger.info("Alexa session ends now");
 	}
 

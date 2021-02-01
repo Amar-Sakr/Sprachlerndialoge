@@ -2,6 +2,7 @@ famCheck = Hello, are you familiar with the application?
 familiarUserMsg = Great, what difficulty do you want to try? Easy or difficult?
 welcomeMsg = Welcome to the language assistance. We have many things prepared for you, but first, what difficulty do you want to try? Easy or difficult?
 gamemodeMsg = And what game mode do you want to play? Learning sentences or trying them out in dialogues?
+famSentenceMsg = Okay, you can always stop by just saying: home menu 
 sentenceMsg = Okay. First I will say the sentence in english, after that in german. Then you can repeat the english version. And remember, you can always stop by just saying: home menu. 
 wrongMsg = Sorry that is wrong.
 correctMsg = That is correct
