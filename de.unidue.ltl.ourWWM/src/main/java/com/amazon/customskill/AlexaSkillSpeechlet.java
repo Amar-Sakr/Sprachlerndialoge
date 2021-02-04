@@ -346,13 +346,16 @@ implements SpeechletV2
 		case Leicht:{
 			diff = 1;
 			res = askUserResponse(utterances.get("gamemodeMsg"));
-		}; break;
+			break;
+		}
 		case Schwer:{
 			diff = 2;
 			res = askUserResponse(utterances.get("gamemodeMsg"));
-		}; break;
+			break;
+		}
 		default: {
 			res = askUserResponse(utterances.get(""));
+			break;
 		}
 		}
 		return res;
@@ -367,18 +370,22 @@ implements SpeechletV2
 			gameMode = 1;
 			selectQuestion();
 			if(famCheck==1) {
-				res = askUserResponse(utterances.get("famSentenceMsg")+question+" "+sätzeDeutsch);	
+				res = askUserResponse(utterances.get("famSentenceMsg")+question+" "+sätzeDeutsch);
+				break;
 			}else {
 			res = askUserResponse(utterances.get("sentenceMsg")+question+" "+sätzeDeutsch);
+			break;
 			}
-		}; break;
+		}
 		case Dialoge:{
 			gameMode = 2;
 			selectQuestion();
-			res = askUserResponse(buildString(question,"",sätzeDeutsch));  //wir brauchen sätzeDeutsch nicht 
-		}; break;
+			res = askUserResponse(question);
+			break;
+		}
 		default: {
 			res = askUserResponse(utterances.get(""));
+			break;
 		}
 		}
 		return res;
@@ -390,7 +397,7 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
-		String pattern0 = "(i want to play )?(the )?(sentences|dialogues)( mode)?( please)?";
+		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "what is your name";
 		String pattern2 = "my name is alexa";
 		String pattern3 = "where are you from";
@@ -485,7 +492,7 @@ implements SpeechletV2
 			String answer = m0.group(3);
 			switch (answer) {
 			case "sentences": ourUserIntent = UserIntent.Sätze; break;
-			case "dialogues": ourUserIntent = UserIntent.Dialoge; break;
+			case "dialogs": ourUserIntent = UserIntent.Dialoge; break;
 			}
 		}else if (m16.find()) {
 			ourUserIntent = UserIntent.No;
