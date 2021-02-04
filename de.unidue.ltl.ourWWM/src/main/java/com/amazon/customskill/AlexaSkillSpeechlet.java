@@ -188,6 +188,7 @@ implements SpeechletV2
 	@Override
 	public SpeechletResponse onIntent(SpeechletRequestEnvelope<IntentRequest> requestEnvelope)
 	{
+		logger.info("onIntent");
 		IntentRequest request = requestEnvelope.getRequest();
 		Intent intent = request.getIntent();
 		userRequest = intent.getSlot("anything").getValue();
@@ -219,7 +220,7 @@ implements SpeechletV2
 			    recState = RecognitionState.Difficulty;
 			    res = askUserResponse(utterances.get("familiarUserMsg"));
 			    logger.info("familiarUserMsg");
-			break;
+			    break;
 			}
 			else if(quit==1) {
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
@@ -227,6 +228,7 @@ implements SpeechletV2
 			}
 			else {
 				recState = RecognitionState.Answer;
+				logger.info("rec State=Answer");
 				selectQuestion();
 				res = askUserResponse(question+""+sätzeDeutsch);
 				break;
@@ -237,7 +239,7 @@ implements SpeechletV2
 			    recState = RecognitionState.Difficulty;
 			    res = askUserResponse(utterances.get("welcomeMsg"));
 			    logger.info("welcomeMsg");
-			break;
+			    break;
 			}
 			else if(quit==0) {
 				quit=1;
@@ -306,7 +308,7 @@ implements SpeechletV2
 					
 				}
 			}
-			else if(ourUserIntent.equals(UserIntent.Stop)) {
+			else if(userRequest.equals("penis")) {
 				logger.info("geht ind den evaluateAnswer Block");
 				recState = RecognitionState.YesNo;
 				logger.info("recState YesNo");
@@ -314,9 +316,11 @@ implements SpeechletV2
 				res = askUserResponse("Do you want to quit?");
 			}
 			else {
+				logger.info("sätze error");
 				res = askUserResponse(utterances.get("errorAnswerMsg")+" "+question+" "+sätzeDeutsch);
 			}
 		}
+		
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
 			switch(ourUserIntent) {
@@ -335,6 +339,9 @@ implements SpeechletV2
 				break;
 			}
 			}
+		}
+		else {
+			res = askUserResponse(utterances.get("errorMsg"));
 		}
 		
 		return res;
@@ -415,7 +422,7 @@ implements SpeechletV2
 		String pattern15 = "I have to go now, Goodbye";
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
-		String pattern18 = "home menu";
+		String pattern18 = "penis";
 //		String pattern18 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
 //		String pattern19 = "?(i am|i come)?(from)";
 //		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
@@ -494,7 +501,13 @@ implements SpeechletV2
 			case "sentences": ourUserIntent = UserIntent.Sätze; break;
 			case "dialogs": ourUserIntent = UserIntent.Dialoge; break;
 			}
-		}else if (m16.find()) {
+		}else if(userRequest.equals(question)) {
+			ourUserIntent = UserIntent.Correct;
+		}
+		/*else if (userRequest.equals(question)==false) {
+			ourUserIntent = UserIntent.Wrong;
+		}*/ //bin mir nicht sicher, ob wir das 
+		else if (m16.find()) {
 			ourUserIntent = UserIntent.No;
 		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
@@ -536,6 +549,10 @@ implements SpeechletV2
 	 */
 	private SpeechletResponse tellUserAndFinish(String text)
 	{
+		quit = 0;
+		count = 1; 
+		famCheck = 0;
+		isRun = false;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
