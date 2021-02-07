@@ -324,16 +324,22 @@ implements SpeechletV2
 		
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
-			if(userRequest.equals("correctAnswer")){
-			count+=1;
-			recState = RecognitionState.Answer;
-			selectQuestion();
-			res = askUserResponse(utterances.get("correctMsg")+" "+question);
-		}
-		else {
-			res = askUserResponse(utterances.get("wrongMsg")+""+question);
-		}
-
+			switch(ourUserIntent) {
+			case Correct:{
+				logger.info("User answer recognized as correct.");
+				recState = RecognitionState.YesNo;
+				res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+				break;
+			}
+			case Wrong:{
+				res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
+				break;
+			}
+			default:{
+				res = askUserResponse(utterances.get("errorMsg"));
+				break;
+			}
+			}
 		}
 		else {
 			res = askUserResponse(utterances.get("errorMsg"));
