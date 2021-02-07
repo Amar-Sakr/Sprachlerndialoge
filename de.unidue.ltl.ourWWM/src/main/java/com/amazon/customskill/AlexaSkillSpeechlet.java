@@ -416,14 +416,14 @@ implements SpeechletV2
 		String pattern7 = "(i want to pay)? (cash | card) ";
 		String pattern8 = "okay | ok";
 		String pattern9 = "(good)? bye";
-		String pattern10 = "(hello|hi)? (my name is|i am)?(jan-niklas|amar|alexa|moritz|ronja|andrea)(and you)?";
+		String pattern10 = "(hello|hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
 		String pattern11 = "(oh|well)?(I am from)?(germany|england|turkey)(how about you|and you)?";
 		String pattern12 = "(oh|well|ehm)?(no|yes)(i have|i have not|I don’t have (any)?)?(hobbies)?";
 		String pattern13 = "(my (hobbies are|hobby is))? (I like|love)?(I am a fan of)? (to)?([a-z]+)";
 		String pattern14 = "((No)?(I don`t(have a job)? work|I am jobless))";
 		String pattern15 = "((I am|I work as|I am working as)?(a student|an assistant|([a-z])+)?)?";
 		String pattern16 = "penis";
-		String pattern17 = "I don’t have ((any(favorite color)?)|one)"; 
+		String pattern17 = "I don’t have((any(favorite color)?)|one)"; 
 		String pattern18 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+))";
 		String pattern19 = "(i(can)?speak|I am speaking)?((german|english)?(and)?(german|english)?)";
 		String pattern20 = "(yes|no)?(I am (not)?(single)?)?(i have a(girlfriend|boyfriend|wife|husband)?)";
