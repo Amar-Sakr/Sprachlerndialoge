@@ -283,30 +283,7 @@ implements SpeechletV2
 	private SpeechletResponse evaluateAnswer(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
-		//switch (ourUserIntent) {
-		//default :{
-			//if (ourUserIntent.equals(UserIntent.A) 
-				//	|| ourUserIntent.equals(UserIntent.B)
-					//|| ourUserIntent.equals(UserIntent.C)
-					//|| ourUserIntent.equals(UserIntent.D)	
-					//) {
-				//logger.info("User answer ="+ ourUserIntent.name().toLowerCase()+ "/correct answer="+correctAnswer);
-				//if (ourUserIntent.name().toLowerCase().equals(correctAnswer)) {
-					//logger.info("User answer recognized as correct.");
-					//if
-						//res = tellUserAndFinish(utterances.get("correctMsg")+" "+utterances.get("congratsMsg")+" "+utterances.get("goodbyeMsg"));
-					//else
-						//recState = RecognitionState.YesNo;
-						//res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
-					
-			//	} else {
-				//	res = tellUserAndFinish(utterances.get("wrongMsg")+ " "+ utterances.get("sumMsg")  + " " + utterances.get("goodbyeMsg"));
-				//}
-			//} else {
-				//res = askUserResponse(utterances.get("errorAnswerMsg"));
-			//}
-		//}
-		//}
+	
 		if(gameMode==1) {
 			if(userRequest.equals(question)) {
 				logger.info("User answer recognized as correct.");
@@ -410,7 +387,6 @@ implements SpeechletV2
 		case Dialoge:{
 			gameMode = 2;
 			res = askUserResponse("And what category do you want to play?");
-			selectQuestion();
 			res = askUserResponse(question);
 			break;
 		}
@@ -427,6 +403,7 @@ implements SpeechletV2
 	// Achtung, Reihenfolge ist wichtig!
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
+		logger.info("Patternsuche");
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "what is your name";
@@ -444,16 +421,16 @@ implements SpeechletV2
 		String pattern13 = "I am speaking german and englisch";
 		String pattern14 = "Are you single";
 		String pattern15 = "I have to go now, Goodbye";
-		String pattern16 = "\\bno\\b";
-		String pattern17 = "\\byes\\b";
-		String pattern18 = "penis";
-		String pattern19 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
-		String pattern20 = "?(i am|i come)?(from)";
-		String pattern21 = "(my hobbies are | my hobby is | i can | i am interested in)";
-		String pattern22 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
-		String pattern23 = "(my favourite color is | i like)";
-		String pattern24 = "(i (am)? speak(ing)?| i can speak)";
-		String pattern25 = "(you too| thanks |thank you)";
+		String pattern16 = "penis";
+		String pattern17 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
+		String pattern18 = "(i am|i come)?(from)";
+		String pattern19 = "(my hobbies are | my hobby is | i can | i am interested in)";
+		String pattern20 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
+		String pattern21 = "(my favourite color is | i like)";
+		String pattern22 = "(i (am)? speak(ing)?| i can speak)";
+		String pattern23 = "(you too| thanks |thank you)";
+		String pattern24 = "\\bno\\b";
+		String pattern25 = "\\byes\\b";
 		
 
 
@@ -530,11 +507,11 @@ implements SpeechletV2
 			}
 		}else if(userRequest.equals(question)) {
 			ourUserIntent = UserIntent.Correct;
-		}else if (m16.find()) {
+		}else if (m24.find()) {
 			ourUserIntent = UserIntent.No;
-		} else if (m17.find()) {
+		} else if (m25.find()) {
 			ourUserIntent = UserIntent.Yes;
-		}else if (m18.find()) {
+		}else if (m16.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if (m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()||m25.find()) {
