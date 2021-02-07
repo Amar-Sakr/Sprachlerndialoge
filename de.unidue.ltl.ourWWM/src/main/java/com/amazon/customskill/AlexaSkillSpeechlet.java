@@ -430,8 +430,10 @@ implements SpeechletV2
 		String pattern21 = "(my favourite color is | i like)";
 		String pattern22 = "(i (am)? speak(ing)?| i can speak)";
 		String pattern23 = "(you too| thanks |thank you)";
-		String pattern24 = "\\bno\\b";
-		String pattern25 = "\\byes\\b";
+		String pattern24 = "((you have to )? go)?  from [a-z]+) | (I (don’t| do not) know) | (I am not from here)| (it(‘s|is) [a-z]+)";
+		String pattern25 = "(you too| thanks |thank you)";
+		String pattern26 = "\\bno\\b";
+		String pattern27 = "\\byes\\b";
 		
 
 
@@ -489,7 +491,10 @@ implements SpeechletV2
 		Matcher m24 = p24.matcher(userRequest);
 		Pattern p25 = Pattern.compile(pattern25);
 		Matcher m25 = p25.matcher(userRequest);
-		
+		Pattern p26 = Pattern.compile(pattern26);
+		Matcher m26 = p26.matcher(userRequest);
+		Pattern p27 = Pattern.compile(pattern27);
+		Matcher m27 = p27.matcher(userRequest);
 		
 		
 		if (m.find()) {
