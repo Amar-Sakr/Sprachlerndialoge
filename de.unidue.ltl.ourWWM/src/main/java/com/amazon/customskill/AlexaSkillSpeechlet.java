@@ -166,22 +166,22 @@ implements SpeechletV2
 		try {
 			con = DBConnection.getConnection2();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
-			ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
 			if (cat==1) {
+				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
 				for (int i=1; i<count;i++) {
 					rs.next();
 				}
 				question = rs.getString("Alexa");
 			}
 			else if (cat==2) {
+				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
 				for (int i=1; i<count;i++) {
 					rs1.next();
 				}
 				question = rs1.getString("Alexa");
 			}
 			else if (cat==3) {
+				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
 				for (int i=1; i<count;i++) {
 					rs2.next();
 				}
@@ -386,12 +386,13 @@ implements SpeechletV2
 		}
 		case Dialoge:{
 			gameMode = 2;
+			logger.info("Dialoge gamemode");
 			res = askUserResponse("And what category do you want to play?");
-			res = askUserResponse(question);
+			
 			break;
 		}
 		default: {
-			res = askUserResponse(utterances.get(""));
+			res = askUserResponse(utterances.get("error"));
 			break;
 		}
 		}
