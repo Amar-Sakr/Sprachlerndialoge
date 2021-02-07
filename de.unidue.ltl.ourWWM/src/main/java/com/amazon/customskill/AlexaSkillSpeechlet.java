@@ -170,10 +170,11 @@ implements SpeechletV2
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM DialogeLeicht");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeLeicht");
+			if(count<12) {
+				rs.next();
+			}
 			question = rs.getString("Alexa");
-			ResultSet rs1 = stmt
-					.executeQuery("SELECT * FROM DialogeLeicht");
-			count = rs1.getInt("ID");
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();}
@@ -323,22 +324,16 @@ implements SpeechletV2
 		
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
-			switch(ourUserIntent) {
-			case Correct:{
-				logger.info("User answer recognized as correct.");
-				recState = RecognitionState.YesNo;
-				res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
-				break;
-			}
-			case Wrong:{
-				res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
-				break;
-			}
-			default:{
-				res = askUserResponse(utterances.get("errorMsg"));
-				break;
-			}
-			}
+			if(userRequest.equals("correctAnswer")){
+			count+=1;
+			recState = RecognitionState.Answer;
+			selectQuestion();
+			res = askUserResponse(utterances.get("correctMsg")+" "+question);
+		}
+		else {
+			res = askUserResponse(utterances.get("wrongMsg")+""+question);
+		}
+
 		}
 		else {
 			res = askUserResponse(utterances.get("errorMsg"));
@@ -423,13 +418,13 @@ implements SpeechletV2
 		String pattern16 = "\\bno\\b";
 		String pattern17 = "\\byes\\b";
 		String pattern18 = "penis";
-//		String pattern18 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
-//		String pattern19 = "?(i am|i come)?(from)";
-//		String pattern20 = "(my hobbies are | my hobby is | i can | i am interested in)";
-//		String pattern21 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
-//		String pattern22 = "(my favourite color is | i like)";
-//		String pattern23 = "(i (am)? speak(ing)?| i can speak)";
-//		String pattern24 = "(you too| thanks |thank you)";
+		String pattern19 = "(my name is) | (i am)"; //--> keinen plan ob das so stimmt
+		String pattern20 = "?(i am|i come)?(from)";
+		String pattern21 = "(my hobbies are | my hobby is | i can | i am interested in)";
+		String pattern22 = "(i am a | i am working as | i don't have work | (i am)?jobless)";
+		String pattern23 = "(my favourite color is | i like)";
+		String pattern24 = "(i (am)? speak(ing)?| i can speak)";
+		String pattern25 = "(you too| thanks |thank you)";
 		
 
 
@@ -473,19 +468,20 @@ implements SpeechletV2
 		Matcher m17 = p17.matcher(userRequest);
 		Pattern p18 = Pattern.compile(pattern18);
 		Matcher m18 = p18.matcher(userRequest);
-//		Pattern p19 = Pattern.compile(pattern19);
-//		Matcher m19 = p17.matcher(userRequest);
-//		Pattern p20 = Pattern.compile(pattern20);
-//		Matcher m20 = p17.matcher(userRequest);
-//		Pattern p21 = Pattern.compile(pattern21);
-//		Matcher m21 = p17.matcher(userRequest);
-//		Pattern p22 = Pattern.compile(pattern22);
-//		Matcher m22 = p17.matcher(userRequest);
-//		Pattern p23 = Pattern.compile(pattern23);
-//		Matcher m23 = p17.matcher(userRequest);
-//		Pattern p24 = Pattern.compile(pattern24);
-//		Matcher m24 = p17.matcher(userRequest);
-		
+		Pattern p19 = Pattern.compile(pattern19);
+		Matcher m19 = p19.matcher(userRequest);
+		Pattern p20 = Pattern.compile(pattern20);
+		Matcher m20 = p20.matcher(userRequest);
+		Pattern p21 = Pattern.compile(pattern21);
+		Matcher m21 = p21.matcher(userRequest);
+		Pattern p22 = Pattern.compile(pattern22);
+		Matcher m22 = p22.matcher(userRequest);
+		Pattern p23 = Pattern.compile(pattern23);
+		Matcher m23 = p23.matcher(userRequest);
+		Pattern p24 = Pattern.compile(pattern24);
+		Matcher m24 = p24.matcher(userRequest);
+		Pattern p25 = Pattern.compile(pattern25);
+		Matcher m25 = p25.matcher(userRequest);
 		
 		
 		if (m.find()) {
@@ -513,6 +509,8 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.Yes;
 		}else if (m18.find()) {
 			ourUserIntent = UserIntent.Stop;
+		}else if (m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()||m25.find()) {
+			correctAnswer=userRequest;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
