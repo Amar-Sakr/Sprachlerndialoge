@@ -515,7 +515,7 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if (m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()||m25.find()) {
-			correctAnswer=userRequest;
+			ourUserIntent = UserIntent.Correct;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
