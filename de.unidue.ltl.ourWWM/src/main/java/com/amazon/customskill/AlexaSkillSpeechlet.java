@@ -61,9 +61,9 @@ implements SpeechletV2
 	static String question = "";
 	static String correctAnswer = "";
 	static String sätzeDeutsch = "";
-	static int diff;
+	static int cat; //1=Restaurant, 2=Smalltalk, 3=Directions
 	static int gameMode;
-	static int count = 1; // the line id in the database
+	static int count = 1;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
@@ -72,11 +72,11 @@ implements SpeechletV2
 	public static String userRequest;
 
 	// In welchem Spracherkennerknoten sind wir?
-	static enum RecognitionState {Answer, YesNo, Difficulty, Gamemode};
+	static enum RecognitionState {Answer, YesNo, Category, Gamemode};
 	RecognitionState recState;
 
 	// Was hat der User grade gesagt. (Die "Semantic Tags"aus DialogOS)
-	static enum UserIntent {Yes, No, Correct, Wrong, Error, Leicht, Schwer, Dialoge, Sätze, Stop};
+	static enum UserIntent {Yes, No, Correct, Wrong, Error, Restaurant, Smalltalk, Directions, Dialoge, Sätze, Stop};
 	UserIntent ourUserIntent;
 
 	// Was das System sagen kann
@@ -136,9 +136,7 @@ implements SpeechletV2
 		logger.info("onLaunch");
 		recState = RecognitionState.YesNo;
 		return askUserResponse(utterances.get("famCheck"));	
-		/*recState = RecognitionState.Difficulty;
-		return askUserResponse(utterances.get("welcomeMsg"));
-		*/
+		
 	}
 
 	// Ziehe eine Frage aus der Datenbank.
@@ -168,13 +166,30 @@ implements SpeechletV2
 		try {
 			con = DBConnection.getConnection2();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM DialogeLeicht");
-			ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-			if(count<12) {
-				rs.next();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
+			ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
+			ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
+			if (cat==1) {
+				for (int i=1; i<count;i++) {
+					rs.next();
+				}
+				question = rs.getString("Alexa");
 			}
-			question = rs.getString("Alexa");
+			else if (cat==2) {
+				for (int i=1; i<count;i++) {
+					rs1.next();
+				}
+				question = rs1.getString("Alexa");
+			}
+			else if (cat==3) {
+				for (int i=1; i<count;i++) {
+					rs2.next();
+				}
+				question = rs2.getString("Alexa");
+			}
+			else {
+				logger.info("Error in Categoryselection");
+			}
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
 			e.printStackTrace();}
@@ -200,8 +215,8 @@ implements SpeechletV2
 		switch (recState) {
 		case Answer: resp = evaluateAnswer(userRequest); break;
 		case YesNo: resp = evaluateYesNo(userRequest); break;
-		case Difficulty: resp = evaluateDiff(userRequest); recState = RecognitionState.Gamemode; break;
-		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Answer; break;
+		case Category: resp = evaluateCategory(userRequest); recState = RecognitionState.Answer; break;
+		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Category; break;
 		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);break;
 		}   
 		return resp;
@@ -218,8 +233,8 @@ implements SpeechletV2
 			if(!isRun) {
 				isRun=true;
 			    famCheck=1; // means familiar user
-			    recState = RecognitionState.Difficulty;
-			    res = askUserResponse(utterances.get("familiarUserMsg"));
+			    recState = RecognitionState.Gamemode;
+			    res = askUserResponse(utterances.get("gamemodeMsg"));
 			    logger.info("familiarUserMsg");
 			    break;
 			}
@@ -237,10 +252,10 @@ implements SpeechletV2
 		} case No: {
 			if(!isRun) {
 				isRun=true;
-			    recState = RecognitionState.Difficulty;
-			    res = askUserResponse(utterances.get("welcomeMsg"));
-			    logger.info("welcomeMsg");
-			    break;
+				 recState = RecognitionState.Gamemode;
+				 res = askUserResponse(utterances.get("welcomeMsg"));
+				 logger.info("welcomeMsg");
+				 break;
 			}
 			else if(quit==0) {
 				quit=1;
@@ -250,8 +265,9 @@ implements SpeechletV2
 			}
 			else {
 				quit=0;
-				recState = RecognitionState.Difficulty;
-				res = askUserResponse("Ok, what difficulty do you want to try?"); 
+				count=1;
+				recState = RecognitionState.Gamemode;
+				res = askUserResponse("Ok, what Gamemode do you want to try?"); 
 				break;
 			}
 			
@@ -332,7 +348,7 @@ implements SpeechletV2
 				break;
 			}
 			case Wrong:{
-				res = askUserResponse(utterances.get("wrongMsg")+""+question+" "+sätzeDeutsch);
+				res = askUserResponse(utterances.get("wrongMsg")+" "+question);
 				break;
 			}
 			default:{
@@ -347,18 +363,24 @@ implements SpeechletV2
 		
 		return res;
 	}
-	private SpeechletResponse evaluateDiff(String userRequest) {
+	private SpeechletResponse evaluateCategory(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
-		case Leicht:{
-			diff = 1;
-			res = askUserResponse(utterances.get("gamemodeMsg"));
+		case Smalltalk:{
+			cat = 1;
+			selectQuestion();
+			res = askUserResponse(question);
 			break;
 		}
-		case Schwer:{
-			diff = 2;
-			res = askUserResponse(utterances.get("gamemodeMsg"));
+		case Restaurant:{
+			cat = 2;
+			selectQuestion();
+			break;
+		}
+		case Directions:{
+			cat = 3;
+			selectQuestion();
 			break;
 		}
 		default: {
@@ -387,6 +409,7 @@ implements SpeechletV2
 		}
 		case Dialoge:{
 			gameMode = 2;
+			res = askUserResponse("And what category do you want to play?");
 			selectQuestion();
 			res = askUserResponse(question);
 			break;
@@ -404,7 +427,7 @@ implements SpeechletV2
 	// Achtung, Reihenfolge ist wichtig!
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
-		String pattern = "(i want to play )?(on|the )?(easy|difficult)( difficulty)?( please)?";
+		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "what is your name";
 		String pattern2 = "my name is alexa";
@@ -413,7 +436,7 @@ implements SpeechletV2
 		String pattern5 = "I never went to Germany before";
 		String pattern6 = "What are your hobbies";
 		String pattern7 = "My hobbies are reading and dancing";
-		String pattern8 = "Whta do you work";
+		String pattern8 = "What do you work";
 		String pattern9 = "I work as an assistant";
 		String pattern10 = "What is your favourite color";
 		String pattern11 = "My favourite color is blue";
@@ -490,11 +513,13 @@ implements SpeechletV2
 		Matcher m25 = p25.matcher(userRequest);
 		
 		
+		
 		if (m.find()) {
 			String answer = m.group(3);
 			switch (answer) {
-			case "easy": ourUserIntent = UserIntent.Leicht; break;
-			case "difficult": ourUserIntent = UserIntent.Schwer; break;
+			case "restaurant": ourUserIntent = UserIntent.Restaurant; break;
+			case "smalltalk": ourUserIntent = UserIntent.Smalltalk; break;
+			case "directions": ourUserIntent = UserIntent.Directions; break;
 			}
 		}
 		else if (m0.find()) {
@@ -505,29 +530,20 @@ implements SpeechletV2
 			}
 		}else if(userRequest.equals(question)) {
 			ourUserIntent = UserIntent.Correct;
-		}
-		/*else if (userRequest.equals(question)==false) {
-			ourUserIntent = UserIntent.Wrong;
-		}*/ //bin mir nicht sicher, ob wir das 
-		else if (m16.find()) {
+		}else if (m16.find()) {
 			ourUserIntent = UserIntent.No;
 		} else if (m17.find()) {
 			ourUserIntent = UserIntent.Yes;
 		}else if (m18.find()) {
 			ourUserIntent = UserIntent.Stop;
+		
 		}else if (m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()||m25.find()) {
 			correctAnswer=userRequest;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
 		logger.info("set ourUserIntent to " +ourUserIntent);
-		
-		// define the correct answer
-/*		if (m18.find()||m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()) {
-			correctAnswer=userRequest;
-			}
-*/	
-	}
+		}
 	
 
 
