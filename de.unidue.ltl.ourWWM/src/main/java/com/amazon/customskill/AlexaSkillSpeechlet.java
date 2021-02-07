@@ -411,7 +411,7 @@ implements SpeechletV2
 		String pattern2 = "i am alone |  (we are)? \\d";
 		String pattern3 = "beer | vine | cola | fanta | sprite | coffee | whisky | no | yes";
 		String pattern4 = "thanks| thank you";
-		String pattern5 = "(good, but)? i want to eat [a-z]+";
+		String pattern5 = "(good but)? i want to eat [a-z]+";
 		String pattern6 = "yes | no | sure";
 		String pattern7 = "(i want to pay)? (cash | card) ";
 		String pattern8 = "okay | ok";
