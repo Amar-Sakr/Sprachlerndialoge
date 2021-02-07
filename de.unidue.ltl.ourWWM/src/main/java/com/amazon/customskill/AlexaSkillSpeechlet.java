@@ -407,13 +407,13 @@ implements SpeechletV2
 		logger.info("Patternsuche");
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
-		String pattern1 = "hello | hi | (my name is)?";
-		String pattern2 = "i am alone | \d | (we are)? (0-9)";
+		String pattern1 = "(hello | hi) (my name is)?";
+		String pattern2 = "i am alone |  (we are)? \\d";
 		String pattern3 = "beer | vine | cola | fanta | sprite | coffee | whisky | no | yes";
-		String pattern4 = "thank (s)? | (you)?";
-		String pattern5 = "(good but)? i want to eat [a-z]+";
+		String pattern4 = "thanks| thank you";
+		String pattern5 = "(good, but)? i want to eat [a-z]+";
 		String pattern6 = "yes | no | sure";
-		String pattern7 = "(i want to pay)? cash | card ";
+		String pattern7 = "(i want to pay)? (cash | card) ";
 		String pattern8 = "okay | ok";
 		String pattern9 = "(good)? bye";
 		String pattern10 = "What is your favourite color";
