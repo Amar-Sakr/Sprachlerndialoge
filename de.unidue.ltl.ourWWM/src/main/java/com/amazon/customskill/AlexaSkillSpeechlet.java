@@ -407,33 +407,32 @@ implements SpeechletV2
 		logger.info("Patternsuche");
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
-		String pattern1 = "(hello | hi) (my name is)?";
-		String pattern2 = "i am alone |  (we are)? \\d";
-		String pattern3 = "beer | vine | cola | fanta | sprite | coffee | whisky | no | yes";
-		String pattern4 = "thanks| thank you";
-		String pattern5 = "(good but)? i want to eat [a-z]+";
-		String pattern6 = "yes | no | sure";
-		String pattern7 = "(i want to pay)? (cash | card) ";
-		String pattern8 = "okay | ok";
-		String pattern9 = "(good)? bye";
-		String pattern10 = "(hello|hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
-		String pattern11 = "(oh|well)?(I am from)?(germany|england|turkey)(how about you|and you)?";
-		String pattern12 = "(oh|well|ehm)?(no|yes)(i have|i have not|I don’t have (any)?)?(hobbies)?";
-		String pattern13 = "(my (hobbies are|hobby is))? (I like|love)?(I am a fan of)? (to)?([a-z]+)";
-		String pattern14 = "((No)?(I don`t(have a job)? work|I am jobless))";
-		String pattern15 = "((I am|I work as|I am working as)?(a student|an assistant|([a-z])+)?)?";
-		String pattern16 = "penis";
-		String pattern17 = "I don’t have((any(favorite color)?)|one)"; 
-		String pattern18 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+))";
-		String pattern19 = "(i(can)?speak|I am speaking)?((german|english)?(and)?(german|english)?)";
-		String pattern20 = "(yes|no)?(I am (not)?(single)?)?(i have a(girlfriend|boyfriend|wife|husband)?)";
-		String pattern21 = "I (don’t|do not) (want to|wanna) (tell|say) (you)?(this|that)?";
-		String pattern22 = "(i (am)? speak(ing)?| i can speak)";//überflüsig
-		String pattern23 = "(you too| thanks |thank you)";
-		String pattern24 = "((you have to )? go)?  from [a-z]+) | (I (don’t| do not) know) | (I am not from here)| (it(‘s|is) [a-z]+)";
-		String pattern25 = "(you too| thanks |thank you)";
-		String pattern26 = "\\bno\\b";
-		String pattern27 = "\\byes\\b";
+		String pattern1 = "(hello|hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
+		String pattern2 = "((you have to )? go)?  from [a-z]+) | (I (don’t| do not) know) | (I am not from here)| (it(‘s|is) [a-z]+)";
+		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+))";
+		String pattern4 = "(oh|well)?(I am from)?(germany|england|turkey)(how about you|and you)?";
+		String pattern5 = "(oh|well|ehm)?(no|yes)(i have|i have not|I don’t have (any)?)?(hobbies)?";
+		String pattern6 = "(my (hobbies are|hobby is))? (I like|love)?(I am a fan of)? (to)?([a-z]+)";
+		String pattern7 = "((I am|I work as|I am working as)?(a student|an assistant|([a-z])+)?)?";
+		String pattern8 = "(i(can)?speak|I am speaking)?((german|english)?(and)?(german|english)?)";
+		String pattern9 = "(yes|no)?(I am (not)?(single)?)?(i have a(girlfriend|boyfriend|wife|husband)?)";
+		String pattern10 = "I (don’t|do not) (want to|wanna) (tell|say) (you)?(this|that)?";
+		String pattern11 = "beer | vine | cola | fanta | sprite | coffee | whisky | no | yes";
+		String pattern12 = "(i (am)? speak(ing)?| i can speak)";//überflüsig
+		String pattern13 = "((No)?(I don`t(have a job)? work|I am jobless))";
+		String pattern14 = "I don’t have((any(favorite color)?)|one)"; 
+		String pattern15 = "(i want to pay)? (cash | card) ";
+		String pattern16 = "(good but)? i want to eat [a-z]+";
+		String pattern17 = "(hello | hi) (my name is)?";
+		String pattern18 = "i am alone |  (we are)? \\d";
+		String pattern19 = "thanks| thank you";
+		String pattern20 = "yes | no | sure";
+		String pattern21 = "okay | ok";
+		String pattern22 = "(good)? bye";
+		String pattern23 = "penis";
+		String pattern24 = "(you too| thanks |thank you)";
+		String pattern25 = "\\bno\\b";
+		String pattern26 = "\\byes\\b";
 		
 
 
@@ -493,8 +492,6 @@ implements SpeechletV2
 		Matcher m25 = p25.matcher(userRequest);
 		Pattern p26 = Pattern.compile(pattern26);
 		Matcher m26 = p26.matcher(userRequest);
-		Pattern p27 = Pattern.compile(pattern27);
-		Matcher m27 = p27.matcher(userRequest);
 		
 		
 		if (m.find()) {
@@ -513,9 +510,9 @@ implements SpeechletV2
 			}
 		}else if(userRequest.equals(question)) {
 			ourUserIntent = UserIntent.Correct;
-		}else if (m24.find()) {
+		}else if (m25.find()) {
 			ourUserIntent = UserIntent.No;
-		} else if (m25.find()) {
+		} else if (m26.find()) {
 			ourUserIntent = UserIntent.Yes;
 		}else if (m16.find()) {
 			ourUserIntent = UserIntent.Stop;
