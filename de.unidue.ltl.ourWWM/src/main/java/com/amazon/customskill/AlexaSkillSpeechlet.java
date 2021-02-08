@@ -64,6 +64,7 @@ implements SpeechletV2
 	static int cat; //1=Restaurant, 2=Smalltalk, 3=Directions
 	static int gameMode;
 	static int count = 1;
+	static int countD = 2;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
@@ -164,27 +165,31 @@ implements SpeechletV2
 		//noch nicht korrekt
 		else if(gameMode==2){
 		try {
-			con = DBConnection.getConnection2();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
 			if (cat==1) {
-				logger.info("Count: "+count);
-				for (int i=1; i<count;i++) {
+				logger.info("Count: "+countD);
+				con = DBConnection.getConnection2();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
+				for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
 				}
 				question = rs.getString("Alexa");
 			}
 			else if (cat==2) {
+				con = DBConnection.getConnection2();
+				Statement stmt = con.createStatement();
 				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
-				for (int i=1; i<count;i++) {
+				for (int i=1; i<countD;i++) {
 					rs1.next();
 				}
 				question = rs1.getString("Alexa");
 			}
 			else if (cat==3) {
+				con = DBConnection.getConnection2();
+				Statement stmt = con.createStatement();
 				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
-				for (int i=1; i<count;i++) {
+				for (int i=1; i<countD;i++) {
 					rs2.next();
 				}
 				question = rs2.getString("Alexa");
@@ -322,7 +327,7 @@ implements SpeechletV2
 			switch(ourUserIntent) {
 			case Correct:{
 				logger.info("User answer recognized as correct.");
-				count+=1;
+				countD+=1;
 				recState = RecognitionState.Answer;
 				selectQuestion();
 				res = askUserResponse(utterances.get("correctMsg") + " " + question);
@@ -357,11 +362,13 @@ implements SpeechletV2
 		case Restaurant:{
 			cat = 2;
 			selectQuestion();
+			res = askUserResponse(question);
 			break;
 		}
 		case Directions:{
 			cat = 3;
 			selectQuestion();
+			res = askUserResponse(question);
 			break;
 		}
 		default: {
@@ -560,6 +567,7 @@ implements SpeechletV2
 	{
 		quit = 0;
 		count = 1; 
+		countD = 2;
 		famCheck = 0;
 		isRun = false;
 		logger.info("Alexa session ends now");
@@ -574,6 +582,7 @@ implements SpeechletV2
 	{
 		quit = 0;
 		count = 1; 
+		countD = 2;
 		famCheck = 0;
 		isRun = false;
 		// Create the plain text output.
