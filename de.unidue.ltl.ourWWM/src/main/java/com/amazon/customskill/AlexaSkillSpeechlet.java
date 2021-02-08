@@ -337,6 +337,12 @@ implements SpeechletV2
 				res = askUserResponse(utterances.get("wrongMsg")+" "+question);
 				break;
 			}
+			case Stop:{
+				quit = 1;
+				recState = RecognitionState.YesNo;
+				res = askUserResponse("Do you want to quit?");
+				break;
+			}
 			default:{
 				res = askUserResponse(utterances.get("errorMsg"));
 				break;
