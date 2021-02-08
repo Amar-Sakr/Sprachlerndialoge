@@ -65,7 +65,7 @@ implements SpeechletV2
 	static int gameMode;
 	static int count = 1;
 	static int countD = 2;
-	static int numberOfRows;
+	static int numberOfRows=1;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
@@ -151,7 +151,10 @@ implements SpeechletV2
 			logger.info("Count: "+count);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
-			getDBLength(rs);
+			ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM SätzeLeicht");
+			rs2.next();
+			numberOfRows = rs2.getInt(1);
+			logger.info("Number of rows: "+numberOfRows);
 			for (int i=1; i<count;i++) {
 				rs.next();
 				rs1.next();
@@ -172,7 +175,10 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-				getDBLength(rs);
+				ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM DialogeLeicht");
+				rs2.next();
+				numberOfRows = rs2.getInt(1);
+				logger.info("Number of rows: "+numberOfRows);
 				for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
@@ -183,7 +189,10 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
-				getDBLength(rs1);
+				ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM DialogeRestaurant");
+				rs2.next();
+				numberOfRows = rs2.getInt(1);
+				logger.info("Number of rows: "+numberOfRows);
 				for (int i=1; i<countD;i++) {
 					rs1.next();
 				}
@@ -193,7 +202,11 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
-				getDBLength(rs2);
+				ResultSet rs3 = stmt.executeQuery("COUNT (*) FROM DialogeWegbeschreibung");
+				rs3.next();
+				numberOfRows = rs3.getInt(1);
+				logger.info("Count: "+countD);
+				logger.info("Number of rows: "+numberOfRows);
 				for (int i=1; i<countD;i++) {
 					rs2.next();
 				}
@@ -433,15 +446,6 @@ implements SpeechletV2
 		}
 		}
 		return res;
-	}
-	private int getDBLength (ResultSet rs) {
-		try {
-		rs.last();
-		numberOfRows = rs.getRow();
-		}catch (Exception e){
-			e.printStackTrace();}
-		
-		return numberOfRows;
 	}
 
 
