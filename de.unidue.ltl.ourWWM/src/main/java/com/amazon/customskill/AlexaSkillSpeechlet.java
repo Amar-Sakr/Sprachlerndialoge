@@ -61,10 +61,11 @@ implements SpeechletV2
 	static String question = "";
 	static String correctAnswer = "";
 	static String sätzeDeutsch = "";
-	static int cat; //1=Restaurant, 2=Smalltalk, 3=Directions
+	static int cat; 
 	static int gameMode;
 	static int count = 1;
 	static int countD = 2;
+	static int numberOfRows;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
@@ -77,7 +78,7 @@ implements SpeechletV2
 	RecognitionState recState;
 
 	// Was hat der User grade gesagt. (Die "Semantic Tags"aus DialogOS)
-	static enum UserIntent {Yes, No, Correct, Wrong, Error, Restaurant, Smalltalk, Directions, Dialoge, Sätze, Stop};
+	static enum UserIntent {Yes, No, Correct, Wrong, Finished, Error, Restaurant, Smalltalk, Directions, Dialoge, Sätze, Stop};
 	UserIntent ourUserIntent;
 
 	// Was das System sagen kann
@@ -150,6 +151,7 @@ implements SpeechletV2
 			logger.info("Count: "+count);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
+			getDBLength(rs);
 			for (int i=1; i<count;i++) {
 				rs.next();
 				rs1.next();
@@ -170,6 +172,7 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
+				getDBLength(rs);
 				for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
@@ -180,6 +183,7 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
+				getDBLength(rs1);
 				for (int i=1; i<countD;i++) {
 					rs1.next();
 				}
@@ -189,6 +193,7 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
+				getDBLength(rs2);
 				for (int i=1; i<countD;i++) {
 					rs2.next();
 				}
@@ -223,7 +228,7 @@ implements SpeechletV2
 		case Answer: resp = evaluateAnswer(userRequest); break;
 		case YesNo: resp = evaluateYesNo(userRequest); break;
 		case Category: resp = evaluateCategory(userRequest); recState = RecognitionState.Answer; break;
-		case Gamemode: resp = evaluateGamemode(userRequest); recState = RecognitionState.Category; break;
+		case Gamemode: resp = evaluateGamemode(userRequest);break;
 		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);break;
 		}   
 		return resp;
@@ -292,36 +297,45 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 	
 		if(gameMode==1) {
-			if(userRequest.equals(question)) {
+			switch(ourUserIntent) {
+			case Correct:{
 				logger.info("User answer recognized as correct.");
-				
 				if(count % 3 == 0) {
 					count+=1;
 					recState = RecognitionState.YesNo;
 					res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
-					
+					break;
 				}
 				else {
 					count+=1;
 					recState = RecognitionState.Answer;
 					selectQuestion();
 					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
-					
+					break;
 				}
 			}
-			else if(userRequest.equals("penis")) {
-				logger.info("geht ind den evaluateAnswer Block");
-				recState = RecognitionState.YesNo;
-				logger.info("recState YesNo");
-				quit = 1;
-				res = askUserResponse("Do you want to quit?");
-			}
-			else {
+			case Error:{
 				logger.info("sätze error");
 				res = askUserResponse(utterances.get("errorAnswerMsg")+" "+question+" "+sätzeDeutsch);
+				break;
+			}
+			case Stop:{
+				quit = 1;
+				recState = RecognitionState.YesNo;
+				res = askUserResponse("Do you want to quit?");
+				break;
+			}
+			case Finished:{
+				res = tellUserAndFinish("You did it!");
+				break;
+			}
+			default:{
+				res = askUserResponse(utterances.get("errorMsg"));
+				break;
+			}
 			}
 		}
-		
+
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
 			switch(ourUserIntent) {
@@ -333,7 +347,7 @@ implements SpeechletV2
 				res = askUserResponse(question);
 				break;
 			}
-			case Wrong:{
+			case Error:{
 				res = askUserResponse(utterances.get("wrongMsg")+" "+question);
 				break;
 			}
@@ -341,6 +355,10 @@ implements SpeechletV2
 				quit = 1;
 				recState = RecognitionState.YesNo;
 				res = askUserResponse("Do you want to quit?");
+				break;
+			}
+			case Finished:{
+				res = tellUserAndFinish("You did it!");
 				break;
 			}
 			default:{
@@ -393,6 +411,7 @@ implements SpeechletV2
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
+			recState = RecognitionState.Answer;
 			if(famCheck==1) {
 				res = askUserResponse(utterances.get("famSentenceMsg")+question+" "+sätzeDeutsch);
 				break;
@@ -404,8 +423,8 @@ implements SpeechletV2
 		case Dialoge:{
 			gameMode = 2;
 			logger.info("Dialoge gamemode");
+			recState = RecognitionState.Category;
 			res = askUserResponse("And what category do you want to play?");
-			
 			break;
 		}
 		default: {
@@ -414,6 +433,15 @@ implements SpeechletV2
 		}
 		}
 		return res;
+	}
+	private int getDBLength (ResultSet rs) {
+		try {
+		rs.last();
+		numberOfRows = rs.getRow();
+		}catch (Exception e){
+			e.printStackTrace();}
+		
+		return numberOfRows;
 	}
 
 
@@ -550,6 +578,8 @@ implements SpeechletV2
 			if (m2.find()|m19.find()|m21.find()|m24.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
+		}else if(count==numberOfRows) {
+			ourUserIntent = UserIntent.Finished;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
