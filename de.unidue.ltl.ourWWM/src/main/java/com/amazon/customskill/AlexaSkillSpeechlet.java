@@ -407,24 +407,24 @@ implements SpeechletV2
 		logger.info("Patternsuche");
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
-		String pattern1 = "(hello|hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
-		String pattern2 = "((you have to )? go)?  from [a-z]+) | (I (don’t| do not) know) | (I am not from here)| (it(‘s|is) [a-z]+)";
+		String pattern1 = "(hello |hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
+		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (I (don’t| do not) know) | (Sorry )?(I am not from here)| (it(‘s|is) [a-z]+)";
 		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+))";
-		String pattern4 = "(oh|well)?(I am from)?(germany|england|turkey)(how about you|and you)?";
-		String pattern5 = "(oh|well|ehm)?(no|yes)(i have|i have not|I don’t have (any)?)?(hobbies)?";
-		String pattern6 = "(my (hobbies are|hobby is))? (I like|love)?(I am a fan of)? (to)?([a-z]+)";
-		String pattern7 = "((I am|I work as|I am working as)?(a student|an assistant|([a-z])+)?)?";
-		String pattern8 = "(i(can)?speak|I am speaking)?((german|english)?(and)?(german|english)?)";
-		String pattern9 = "(yes|no)?(I am (not)?(single)?)?(i have a(girlfriend|boyfriend|wife|husband)?)";
-		String pattern10 = "I (don’t|do not) (want to|wanna) (tell|say) (you)?(this|that)?";
+		String pattern4 = "(oh |well )?(I am from )?(germany|england|turkey)( how about you| and you)?";
+		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|I don’t have (any)?)?( hobbies)?";
+		String pattern6 = "(my (hobbies are |hobby is ))? (I (like |love ))?(I am a fan of )? (to )?([a-z]+)";
+		String pattern7 = "((I am |I work as |I am working as )?(a student|an assistant|([a-z])+)?)?";
+		String pattern8 = "(i (can )?speak |I am speaking )?((german|english)?( and )?(german|english)?)";
+		String pattern9 = "(yes |no )?(I am (not )?(single )?)?(i have a (girlfriend|boyfriend|wife|husband)?)";
+		String pattern10 = "I (don’t |do not ) (want to |wanna ) (tell |say ) (you )?(this|that)?";
 		String pattern11 = "beer | vine | cola | fanta | sprite | coffee | whisky | no | yes";
-		String pattern12 = "(i (am)? speak(ing)?| i can speak)";//überflüsig
-		String pattern13 = "((No)?(I don`t(have a job)? work|I am jobless))";
-		String pattern14 = "I don’t have((any(favorite color)?)|one)"; 
-		String pattern15 = "(i want to pay)? (cash | card) ";
-		String pattern16 = "(good but)? i want to eat [a-z]+";
+		//String pattern12 = "(i (am )? speak(ing )?| i can speak)";//überflüsig
+		String pattern13 = "(No )?(I don`t ((have a job)|work)|I am jobless)";
+		String pattern14 = "I don’t have ((any( favorite color)?)|one)"; 
+		String pattern15 = "(i want to pay )? (cash|card) ";
+		String pattern16 = "(good but )?i want to eat [a-z]+";
 		String pattern17 = "(hello | hi) (my name is)?";
-		String pattern18 = "i am alone |  (we are)? \\d";
+		String pattern18 = "i am alone |  (we are )?\\d";
 		String pattern19 = "thanks| thank you";
 		String pattern20 = "yes | no | sure";
 		String pattern21 = "okay | ok";
@@ -462,8 +462,8 @@ implements SpeechletV2
 		Matcher m10 = p10.matcher(userRequest);
 		Pattern p11 = Pattern.compile(pattern11);
 		Matcher m11 = p11.matcher(userRequest);
-		Pattern p12 = Pattern.compile(pattern12);
-		Matcher m12 = p12.matcher(userRequest);
+		//Pattern p12 = Pattern.compile(pattern12);
+		//Matcher m12 = p12.matcher(userRequest);
 		Pattern p13 = Pattern.compile(pattern13);
 		Matcher m13 = p13.matcher(userRequest);
 		Pattern p14 = Pattern.compile(pattern14);
@@ -514,14 +514,14 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.No;
 		} else if (m26.find()) {
 			ourUserIntent = UserIntent.Yes;
-		}else if (m16.find()) {
+		}else if (m23.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if(ourUserIntent.equals(UserIntent.Dialoge)){
 			logger.info("Dialoge Matcher");
 			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
-				m9.find()|m10.find()|m11.find()|m12.find()|m13.find()|m14.find()|m15.find()|m16.find()|
-				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()) {
+				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
+				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
 		}else {
