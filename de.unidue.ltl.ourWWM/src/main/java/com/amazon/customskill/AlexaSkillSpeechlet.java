@@ -330,7 +330,7 @@ implements SpeechletV2
 				countD+=1;
 				recState = RecognitionState.Answer;
 				selectQuestion();
-				res = askUserResponse(utterances.get("correctMsg") + " " + question);
+				res = askUserResponse(question);
 				break;
 			}
 			case Wrong:{
