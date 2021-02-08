@@ -146,7 +146,7 @@ implements SpeechletV2
 		try {
 			con = DBConnection.getConnection1();
 			Statement stmt = con.createStatement();
-			logger.info("ID: "+count);
+			logger.info("Count: "+count);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			for (int i=1; i<count;i++) {
@@ -166,10 +166,12 @@ implements SpeechletV2
 		try {
 			con = DBConnection.getConnection2();
 			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
 			if (cat==1) {
-				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
+				logger.info("Count: "+count);
 				for (int i=1; i<count;i++) {
 					rs.next();
+					logger.info("for schleife");
 				}
 				question = rs.getString("Alexa");
 			}
@@ -188,7 +190,7 @@ implements SpeechletV2
 				question = rs2.getString("Alexa");
 			}
 			else {
-				logger.info("Error in Categoryselection");
+				logger.info("Error in Category selection");
 			}
 			logger.info("Extracted question from database "+ question);
 		} catch (Exception e){
@@ -320,8 +322,10 @@ implements SpeechletV2
 			switch(ourUserIntent) {
 			case Correct:{
 				logger.info("User answer recognized as correct.");
-				recState = RecognitionState.YesNo;
-				res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+				count+=1;
+				recState = RecognitionState.Answer;
+				selectQuestion();
+				res = askUserResponse(utterances.get("correctMsg") + " " + question);
 				break;
 			}
 			case Wrong:{
@@ -517,21 +521,21 @@ implements SpeechletV2
 		}else if (m23.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
-		}else if(ourUserIntent.equals(UserIntent.Smalltalk)){
+		}else if(cat==2){
 			logger.info("Dialoge Matcher Smalltalk");
 			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
 				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
 				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
-		}else if(ourUserIntent.equals(UserIntent.Directions)){
+		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
 			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
 				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
 				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
-		}else if(ourUserIntent.equals(UserIntent.Restaurant)){
+		}else if(cat==1){
 			logger.info("Dialoge Matcher Restaurant");
 			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
 				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
