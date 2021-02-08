@@ -517,8 +517,13 @@ implements SpeechletV2
 		}else if (m16.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
-		}else if (m19.find()||m20.find()||m21.find()||m22.find()||m23.find()||m24.find()||m25.find()) {
+		}else if(ourUserIntent.equals(UserIntent.Dialoge)){
+			logger.info("Dialoge Matcher");
+			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
+				m9.find()|m10.find()|m11.find()|m12.find()|m13.find()|m14.find()|m15.find()|m16.find()|
+				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()) {
 			ourUserIntent = UserIntent.Correct;
+			}
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
