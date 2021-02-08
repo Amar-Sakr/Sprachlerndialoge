@@ -409,11 +409,11 @@ implements SpeechletV2
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "(hello |hi )? (my name is |i am )?(jan-niklas|amar|alexa|moritz|ronja|andrea)( and you)?";
 		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (I (don’t| do not) know) | (Sorry )?(I am not from here)| (it(‘s|is) [a-z]+)";
-		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+))";
+		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|([a-z])+)";
 		String pattern4 = "(oh |well )?(I am from )?(germany|england|turkey)( how about you| and you)?";
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|I don’t have (any)?)?( hobbies)?";
 		String pattern6 = "(my (hobbies are |hobby is ))? (I (like |love ))?(I am a fan of )? (to )?([a-z]+)";
-		String pattern7 = "((I am |I work as |I am working as )?(a student|an assistant|([a-z])+)?)?";
+		String pattern7 = "(I am |I work as |I am working as )?(a student|an assistant|([a-z])+)";
 		String pattern8 = "(i (can )?speak |I am speaking )?((german|english)?( and )?(german|english)?)";
 		String pattern9 = "(yes |no )?(I am (not )?(single )?)?(i have a (girlfriend|boyfriend|wife|husband)?)";
 		String pattern10 = "I (don’t |do not ) (want to |wanna ) (tell |say ) (you )?(this|that)?";
