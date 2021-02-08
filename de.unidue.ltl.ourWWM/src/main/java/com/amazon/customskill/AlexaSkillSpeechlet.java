@@ -534,25 +534,20 @@ implements SpeechletV2
 		}else if (m23.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
-		}else if(cat==2){
+		}else if(cat==1){
 			logger.info("Dialoge Matcher Smalltalk");
-			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
-				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
-				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
+			if (m1.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m9.find()|
+				m10.find()|m13.find()|m14.find()) {
+			ourUserIntent = UserIntent.Correct;
+			}
+		}else if(cat==2){
+			logger.info("Dialoge Matcher Restaurant");
+			if (m11.find()|m15.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
-			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
-				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
-				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
-			ourUserIntent = UserIntent.Correct;
-			}
-		}else if(cat==1){
-			logger.info("Dialoge Matcher Restaurant");
-			if (m1.find()|m2.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|
-				m9.find()|m10.find()|m11.find()|/*m12.find()|*/m13.find()|m14.find()|m15.find()|m16.find()|
-				m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m24.find()) {
+			if (m2.find()|m19.find()|m21.find()|m24.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
 		}else {
