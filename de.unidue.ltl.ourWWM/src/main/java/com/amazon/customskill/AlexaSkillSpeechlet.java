@@ -65,10 +65,14 @@ implements SpeechletV2
 	static int gameMode;
 	static int count = 1;
 	static int countD = 2;
-	static int numberOfRows=1;
+	static int rowsST = 8;
+	static int rowsR = 11;
+	static int rowsD=4;
+	static int rowsS=33;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
+	static boolean finished = false;
 
 	// Was der User gesagt hat
 	public static String userRequest;
@@ -144,17 +148,14 @@ implements SpeechletV2
 	// Ziehe eine Frage aus der Datenbank.
 	private void selectQuestion() {
 		if(gameMode==1) {
-		
+		isFinished(count);
 		try {
 			con = DBConnection.getConnection1();
 			Statement stmt = con.createStatement();
 			logger.info("Count: "+count);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
-			ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM SätzeLeicht");
-			rs2.next();
-			numberOfRows = rs2.getInt(1);
-			logger.info("Number of rows: "+numberOfRows);
+			logger.info("Count: "+count);
 			for (int i=1; i<count;i++) {
 				rs.next();
 				rs1.next();
@@ -169,16 +170,14 @@ implements SpeechletV2
 		}
 		//noch nicht korrekt
 		else if(gameMode==2){
+			isFinished(countD);
 		try {
 			if (cat==1) {
 				logger.info("Count: "+countD);
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-				ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM DialogeLeicht");
-				rs2.next();
-				numberOfRows = rs2.getInt(1);
-				logger.info("Number of rows: "+numberOfRows);
+				logger.info("Count: "+countD);
 				for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
@@ -189,10 +188,7 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
-				ResultSet rs2 = stmt.executeQuery("COUNT (*) FROM DialogeRestaurant");
-				rs2.next();
-				numberOfRows = rs2.getInt(1);
-				logger.info("Number of rows: "+numberOfRows);
+				logger.info("Count: "+countD);
 				for (int i=1; i<countD;i++) {
 					rs1.next();
 				}
@@ -202,11 +198,7 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
-				ResultSet rs3 = stmt.executeQuery("COUNT (*) FROM DialogeWegbeschreibung");
-				rs3.next();
-				numberOfRows = rs3.getInt(1);
 				logger.info("Count: "+countD);
-				logger.info("Number of rows: "+numberOfRows);
 				for (int i=1; i<countD;i++) {
 					rs2.next();
 				}
@@ -447,6 +439,34 @@ implements SpeechletV2
 		}
 		return res;
 	}
+	private boolean isFinished(int count) {
+		if(cat==1) {
+			if(rowsST>count) {
+				finished = true;
+			}else {
+				
+			}
+		}else if(cat==2) {
+			if(rowsR>count) {
+				finished = true;
+			}else {
+				
+			}
+		}else if(cat==3) {
+			if(rowsD>count) {
+				finished = true;
+			}else {
+				
+			}
+		}else {
+			if(count>rowsS) {
+				finished = true;
+			}else {
+				
+			}
+		}
+		return finished;
+	}
 
 
 
@@ -582,7 +602,7 @@ implements SpeechletV2
 			if (m2.find()|m19.find()|m21.find()|m22.find()|m24.find()|m25.find()|m26.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
-		}else if(count==numberOfRows) {
+		}else if(finished==true) {
 			ourUserIntent = UserIntent.Finished;
 		}else {
 			ourUserIntent = UserIntent.Error;
