@@ -251,7 +251,7 @@ implements SpeechletV2
 		recognizeUserIntent(userRequest);
 		switch (ourUserIntent) {
 		case Yes: {
-			if(!isRun) {
+			if(isRun==false) {
 				isRun=true;
 			    famCheck=1; // means familiar user
 			    recState = RecognitionState.Gamemode;
@@ -341,7 +341,7 @@ implements SpeechletV2
 				break;
 			}
 			default:{
-				res = askUserResponse(utterances.get("errorMsg"));
+				res = askUserResponse(utterances.get("errorAnswerMsg"));
 				break;
 			}
 			}
@@ -375,13 +375,13 @@ implements SpeechletV2
 				break;
 			}
 			default:{
-				res = askUserResponse(utterances.get("errorMsg"));
+				res = askUserResponse(utterances.get("errorAnswerMsg"));
 				break;
 			}
 			}
 		}
 		else {
-			res = askUserResponse(utterances.get("errorMsg"));
+			res = askUserResponse(utterances.get("errorAnswerMsg"));
 		}
 		
 		return res;
@@ -487,10 +487,10 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		logger.info("Patternsuche");
-		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
+		String pattern = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "(hello |hi )? (my name is |i am )? ([a-z]+) ( and you)?"; // name
-		String pattern2 = "((you have to )? (go |turn ) [a-z]+) | (i (don’t| do not) know) | ((sorry )?(i am not from here))| (it(‘s|is) [a-z]+)"; //address
+		String pattern2 = "(((you have to )? (go |turn ) [a-z]+) | (i (don’t| do not) know) | ((sorry )?(i am not from here))| (it(‘s|is) [a-z]+))"; //address
 		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern4 = "(oh |well )?(I am from )? [a-z]+ ( how about you| and you)?"; // where are you from
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
@@ -578,7 +578,7 @@ implements SpeechletV2
 			String answer = m.group(3);
 			switch (answer) {
 			case "restaurant": ourUserIntent = UserIntent.Restaurant; break;
-			case "smalltalk": ourUserIntent = UserIntent.Smalltalk; break;
+			case "short conversations": ourUserIntent = UserIntent.Smalltalk; break;
 			case "directions": ourUserIntent = UserIntent.Directions; break;
 			}
 		}
@@ -601,7 +601,7 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if(cat==1){
-			logger.info("Dialoge Matcher Smalltalk");
+			logger.info("Dialoge Matcher Short Conversation");
 			if (m1.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m9.find()|
 				m10.find()|m13.find()|m14.find()|m22.find()|m25.find()|m26.find()) {
 				ourUserIntent = UserIntent.Correct;
@@ -620,10 +620,13 @@ implements SpeechletV2
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
 			if (m2.find()|m19.find()|m21.find()|m22.find()|m25.find()|m26.find()) {
-				ourUserIntent = UserIntent.Correct;
+				logger.info("match");
 			
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
+				}
+				else {
+					ourUserIntent = UserIntent.Correct;
 				}
 			}
 		}else {
@@ -648,6 +651,7 @@ implements SpeechletV2
 		famCheck = 0;
 		isRun = false;
 		finished = false;
+		cat=0;
 		logger.info("Alexa session ends now");
 	}
 
@@ -664,6 +668,7 @@ implements SpeechletV2
 		famCheck = 0;
 		isRun = false;
 		finished = false;
+		cat=0;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);

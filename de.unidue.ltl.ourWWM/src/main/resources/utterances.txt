@@ -1,6 +1,6 @@
 famCheck = Hello, are you familiar with the application?
 familiarUserDialogsMsg = Great, and what category do you want to try?
-dialogsCategoryMsg = Great, and what simulation do you want to try? Helping with directions, visiting a restaurant or smalltalk?
+dialogsCategoryMsg = Great, and what simulation do you want to try? Helping with directions, visiting a restaurant or short conversations?
 welcomeMsg = Welcome to the language assistance. We have many things prepared for you, but first, what game mode do you want to play? Learning sentences or trying them out in dialogs?
 gamemodeMsg = And what game mode do you want to play? Learning sentences or trying them out in dialogs?
 famSentenceMsg = Okay, you can always stop by just saying: I want to do something else.
