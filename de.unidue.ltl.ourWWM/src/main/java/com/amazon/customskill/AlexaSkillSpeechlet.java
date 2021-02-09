@@ -281,7 +281,7 @@ implements SpeechletV2
 			else if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
-				res=askUserResponse("Do you want to quit?");
+				res=askUserResponse("Do you want to end the application?");
 				break;
 			}
 			else {
@@ -437,8 +437,13 @@ implements SpeechletV2
 			gameMode = 2;
 			logger.info("Dialoge gamemode");
 			recState = RecognitionState.Category;
-			res = askUserResponse("And what category do you want to play?");
+			if(famCheck==1) {
+				res = askUserResponse(utterances.get("familiarUserDialogsMsg"));
+				break;
+			}else {
+			res = askUserResponse(utterances.get("dialogsCategoryMsg"));
 			break;
+			}
 		}
 		default: {
 			res = askUserResponse(utterances.get("error"));
