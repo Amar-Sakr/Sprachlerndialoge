@@ -483,9 +483,9 @@ implements SpeechletV2
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "(hello |hi )? (my name is |i am )? ([a-z]+) ( and you)?"; // name
-		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (i (don’t| do not) know) | (Sorry )?(i am not from here)| (it(‘s|is) [a-z]+)"; //address
-		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|Orange|Brown|gray|Pink)"; //fav color
-		String pattern4 = "(oh |well )?(I am from )? [a-z]+ ( how about you| and you)?"; // where are you from
+		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (i (don’t| do not) know) | (sorry )?(i am not from here)| (it('s|is) [a-z]+)"; //address
+		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
+		String pattern4 = "(oh |well )?(i am from )? [a-z]+ ( how about you| and you)?"; // where are you from
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
 		String pattern6 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of )) ([a-z]+)"; //hobbies
 		String pattern7 = "(i am |i work as |i am working as )?(a student|an assistant|([a-z])+)"; //work
@@ -493,7 +493,6 @@ implements SpeechletV2
 		String pattern9 = "(yes |no )?  ((i am (not)? single )|(i have a (girlfriend|boyfriend|wife|husband)))"; // are you single 
 		String pattern10 = "i (don’t |do not ) (want to |wanna ) (tell |say ) (you )?(this|that)?";
 		String pattern11 = "(i (would like)? (want)? to drink [a-z]+) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
-		//String pattern12 = "(i (am )? speak(ing )?| i can speak)";//überflüsig
 		String pattern13 = "(No )?(i don`t ((have a job)|work)|i am jobless)";
 		String pattern14 = "i don’t have ((any( favorite color)?)|one)"; //color
 		String pattern15 = "(i want to pay )? (cash|card) "; //paying
