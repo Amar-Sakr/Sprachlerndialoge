@@ -494,12 +494,11 @@ implements SpeechletV2
 		String pattern16 = "(good but )?i want to eat [a-z]+";
 		String pattern17 = "(hello | hi) (my name is)?";
 		String pattern18 = "i am alone |  (we are )?\\d";
-		String pattern19 = "thanks| thank you";
-		String pattern20 = "yes | no | sure";
-		String pattern21 = "okay | ok";
+		String pattern19 = "you too|thanks| thank you";
+		String pattern20 = "(yes | no | sure) ,? [a-z]*";
+		String pattern21 = "(okay | ok) ,? [a-z]*";
 		String pattern22 = "(good)? bye";
 		String pattern23 = "penis";
-		String pattern24 = "(you too| thanks |thank you)";
 		String pattern25 = "\\bno\\b";
 		String pattern26 = "\\byes\\b";
 		
@@ -555,8 +554,8 @@ implements SpeechletV2
 		Matcher m22 = p22.matcher(userRequest);
 		Pattern p23 = Pattern.compile(pattern23);
 		Matcher m23 = p23.matcher(userRequest);
-		Pattern p24 = Pattern.compile(pattern24);
-		Matcher m24 = p24.matcher(userRequest);
+//		Pattern p24 = Pattern.compile(pattern24);
+//		Matcher m24 = p24.matcher(userRequest);
 		Pattern p25 = Pattern.compile(pattern25);
 		Matcher m25 = p25.matcher(userRequest);
 		Pattern p26 = Pattern.compile(pattern26);
@@ -599,7 +598,7 @@ implements SpeechletV2
 			}
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
-			if (m2.find()|m19.find()|m21.find()|m22.find()|m24.find()|m25.find()|m26.find()) {
+			if (m2.find()|m19.find()|m21.find()|m22.find()|m25.find()|m26.find()) {
 			ourUserIntent = UserIntent.Correct;
 			}
 		}else if(finished==true) {
