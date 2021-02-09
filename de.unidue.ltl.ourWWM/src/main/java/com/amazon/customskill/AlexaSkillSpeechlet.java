@@ -170,14 +170,14 @@ implements SpeechletV2
 		}
 		//noch nicht korrekt
 		else if(gameMode==2){
-			isFinished(countD);
 		try {
 			if (cat==1) {
 				logger.info("Count: "+countD);
+				isFinished(countD);
+				logger.info("Finished: "+finished);
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-				logger.info("Count: "+countD);
 				for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
@@ -185,6 +185,8 @@ implements SpeechletV2
 				question = rs.getString("Alexa");
 			}
 			else if (cat==2) {
+				isFinished(countD);
+				logger.info("Finished: "+finished);
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs1 = stmt.executeQuery("SELECT * FROM DialogeRestaurant");
@@ -195,6 +197,8 @@ implements SpeechletV2
 				question = rs1.getString("Alexa");
 			}
 			else if (cat==3) {
+				isFinished(countD);
+				logger.info("Finished: "+finished);
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs2 = stmt.executeQuery("SELECT * FROM DialogeWegbeschreibung");
@@ -331,7 +335,9 @@ implements SpeechletV2
 				break;
 			}
 			case Finished:{
-				res = tellUserAndFinish("You did it!");
+				quit = 1;
+				recState = RecognitionState.YesNo;
+				res = askUserResponse("Nice, you finished all the sentences I have to offer.");
 				break;
 			}
 			default:{
@@ -441,19 +447,19 @@ implements SpeechletV2
 	}
 	private boolean isFinished(int count) {
 		if(cat==1) {
-			if(rowsST>count) {
+			if(count>rowsST) {
 				finished = true;
 			}else {
 				
 			}
 		}else if(cat==2) {
-			if(rowsR>count) {
+			if(count>rowsR) {
 				finished = true;
 			}else {
 				
 			}
 		}else if(cat==3) {
-			if(rowsD>count) {
+			if(count>rowsD) {
 				finished = true;
 			}else {
 				
@@ -578,6 +584,9 @@ implements SpeechletV2
 			}
 		}else if(userRequest.equals(question)) {
 			ourUserIntent = UserIntent.Correct;
+			if(finished==true) {
+				ourUserIntent = UserIntent.Finished;
+			}
 		}else if (m25.find()) {
 			ourUserIntent = UserIntent.No;
 		} else if (m26.find()) {
@@ -589,20 +598,28 @@ implements SpeechletV2
 			logger.info("Dialoge Matcher Smalltalk");
 			if (m1.find()|m3.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m9.find()|
 				m10.find()|m13.find()|m14.find()|m22.find()|m25.find()|m26.find()) {
-			ourUserIntent = UserIntent.Correct;
+				ourUserIntent = UserIntent.Correct;
+				if(finished==true) {
+					ourUserIntent = UserIntent.Finished;
+				}
 			}
 		}else if(cat==2){
 			logger.info("Dialoge Matcher Restaurant");
 			if (m11.find()|m15.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m25.find()|m26.find()) {
-			ourUserIntent = UserIntent.Correct;
+				ourUserIntent = UserIntent.Correct;
+				if(finished==true) {
+					ourUserIntent = UserIntent.Finished;
+				}
 			}
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
 			if (m2.find()|m19.find()|m21.find()|m22.find()|m25.find()|m26.find()) {
-			ourUserIntent = UserIntent.Correct;
+				ourUserIntent = UserIntent.Correct;
+			
+				if(finished==true) {
+					ourUserIntent = UserIntent.Finished;
+				}
 			}
-		}else if(finished==true) {
-			ourUserIntent = UserIntent.Finished;
 		}else {
 			ourUserIntent = UserIntent.Error;
 		}
@@ -624,6 +641,7 @@ implements SpeechletV2
 		countD = 2;
 		famCheck = 0;
 		isRun = false;
+		finished = false;
 		logger.info("Alexa session ends now");
 	}
 
@@ -639,6 +657,7 @@ implements SpeechletV2
 		countD = 2;
 		famCheck = 0;
 		isRun = false;
+		finished = false;
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
@@ -659,7 +678,7 @@ implements SpeechletV2
 
 		// reprompt after 8 seconds
 		SsmlOutputSpeech repromptSpeech = new SsmlOutputSpeech();
-		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> Bist du noch da?</speak>");
+		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> Are you still here?</speak>");
 
 		Reprompt rep = new Reprompt();
 		rep.setOutputSpeech(repromptSpeech);
