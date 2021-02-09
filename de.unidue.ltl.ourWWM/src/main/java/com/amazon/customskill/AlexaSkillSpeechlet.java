@@ -337,7 +337,7 @@ implements SpeechletV2
 			case Finished:{
 				quit = 1;
 				recState = RecognitionState.YesNo;
-				res = askUserResponse("Nice, you finished all the sentences I have to offer.");
+				res = askUserResponse(utterances.get("sentencesFinishing"));
 				break;
 			}
 			default:{
@@ -424,10 +424,10 @@ implements SpeechletV2
 			selectQuestion();
 			recState = RecognitionState.Answer;
 			if(famCheck==1) {
-				res = askUserResponse(utterances.get("famSentenceMsg")+question+" "+sätzeDeutsch);
+				res = askUserResponse(utterances.get("famSentenceMsg")+" "+question+", "+sätzeDeutsch);
 				break;
 			}else {
-			res = askUserResponse(utterances.get("sentenceMsg")+question+" "+sätzeDeutsch);
+			res = askUserResponse(utterances.get("sentenceMsg")+" "+question+", "+sätzeDeutsch);
 			break;
 			}
 		}
@@ -504,7 +504,7 @@ implements SpeechletV2
 		String pattern20 = "(yes | no | sure) ,? [a-z]*";
 		String pattern21 = "(okay | ok) ,? [a-z]*";
 		String pattern22 = "(good)? bye";
-		String pattern23 = "penis";
+		String pattern23 = "i want to do something else";
 		String pattern25 = "\\bno\\b";
 		String pattern26 = "\\byes\\b";
 		
