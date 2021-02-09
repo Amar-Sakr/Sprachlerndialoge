@@ -369,7 +369,9 @@ implements SpeechletV2
 				break;
 			}
 			case Finished:{
-				res = tellUserAndFinish("You did it!");
+				quit = 1;
+				recState = RecognitionState.YesNo;
+				res = askUserResponse(utterances.get("dialogsFinishing"));
 				break;
 			}
 			default:{
@@ -483,9 +485,15 @@ implements SpeechletV2
 		String pattern = "(i want to play )?(on|the )?(restaurant|smalltalk|directions)( difficulty)?( please)?";
 		String pattern0 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
 		String pattern1 = "(hello |hi )? (my name is |i am )? ([a-z]+) ( and you)?"; // name
+<<<<<<< Updated upstream
 		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (i (don’t| do not) know) | (sorry )?(i am not from here)| (it('s|is) [a-z]+)"; //address
 		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern4 = "(oh |well )?(i am from )? [a-z]+ ( how about you| and you)?"; // where are you from
+=======
+		String pattern2 = "((you have to )? (go |turn ))?([a-z]+) | (i (don’t| do not) know) | (sorry )?(i am not from here)| (it(‘s|is) [a-z]+)"; //address
+		String pattern3 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
+		String pattern4 = "(oh |well )?(I am from )? [a-z]+ ( how about you| and you)?"; // where are you from
+>>>>>>> Stashed changes
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
 		String pattern6 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of )) ([a-z]+)"; //hobbies
 		String pattern7 = "(i am |i work as |i am working as )?(a student|an assistant|([a-z])+)"; //work
