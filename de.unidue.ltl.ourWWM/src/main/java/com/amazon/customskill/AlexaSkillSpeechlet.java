@@ -281,7 +281,7 @@ implements SpeechletV2
 			else if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
-				res=askUserResponse("Do you want to quit?");
+				res=askUserResponse("Do you want to end the application?");
 				break;
 			}
 			else {
