@@ -154,15 +154,9 @@ implements SpeechletV2
 			Statement stmt = con.createStatement();
 			logger.info("Count: "+count);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM SätzeLeicht ORDER BY random() LIMIT 1");
-//			ResultSet rs1 = stmt.executeQuery("SELECT * FROM SätzeLeicht");
 			logger.info("Count: "+count);
-/*			for (int i=1; i<count;i++) {
-				rs.next();
-//				rs1.next();
-			}*/
 			sätzeDeutsch = rs.getString("Deutsch");
 			question = rs.getString("Englisch");
-			//correctAnswer = rs.getString("Englisch");
 			logger.info("Extracted question from database: "+ question);
 		} catch (Exception e){
 			logger.info("Exception");
