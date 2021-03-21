@@ -261,7 +261,7 @@ implements SpeechletV2
 				recState = RecognitionState.Answer;
 				logger.info("rec State=Answer");
 				selectQuestion();
-				res = askUserResponse(question+""+sätzeDeutsch);
+				res = askUserResponse(question+""+responseWithFlavour(sätzeDeutsch,2));
 				break;
 			}
 		} case No: {
@@ -705,7 +705,7 @@ implements SpeechletV2
 			speech.setSsml("<speak><amazon:effect name=\"whispered\">" + text + "</amazon:effect></speak>");
 			break; 
 		case 1: 
-			speech.setSsml("<speak><emphasis level=\"strong\">" + text + "</emphasis></speak>");
+			speech.setSsml("<speak><lang xml:lang=de-DE>"+ text +"</lang></speak>");
 			break; 
 		case 2: 
 			String firstNoun="erstes Wort buchstabiert";
