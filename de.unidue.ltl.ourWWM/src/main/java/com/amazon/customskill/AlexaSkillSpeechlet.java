@@ -660,12 +660,11 @@ implements SpeechletV2
 			logger.info("Dialoge Matcher Directions");
 			if (m0.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
 				logger.info("match");
+				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
 				}
-				else {
-					ourUserIntent = UserIntent.Correct;
-				}
+				
 			}
 		}else {
 			ourUserIntent = UserIntent.Error;
@@ -725,8 +724,6 @@ implements SpeechletV2
 	private SpeechletResponse askUserResponse(ArrayList<String> text)
 	{
 		SsmlOutputSpeech speech = new SsmlOutputSpeech();
-		SsmlOutputSpeech speech1 = new SsmlOutputSpeech();
-		SsmlOutputSpeech speech2 = new SsmlOutputSpeech();
 		if(text.contains(sätzeDeutsch)) {
 			text.remove(sätzeDeutsch);
 			speech.setSsml("<speak>"+text.toString()+"<voice name=\"Vicki\"><lang xml:lang=\"de-DE\">"+sätzeDeutsch+"</lang></voice></speak>");
@@ -752,7 +749,6 @@ implements SpeechletV2
 	 * @return
 	 */
 	private SpeechletResponse responseWithFlavour(String text, int i) {
-
 		SsmlOutputSpeech speech = new SsmlOutputSpeech();
 		switch(i){ 
 		case 0: 
