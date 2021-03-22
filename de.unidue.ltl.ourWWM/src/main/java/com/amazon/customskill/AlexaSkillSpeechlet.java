@@ -691,6 +691,7 @@ implements SpeechletV2
 		isRun = false;
 		finished = false;
 		cat=0;
+		output.clear();
 		logger.info("Alexa session ends now");
 	}
 
