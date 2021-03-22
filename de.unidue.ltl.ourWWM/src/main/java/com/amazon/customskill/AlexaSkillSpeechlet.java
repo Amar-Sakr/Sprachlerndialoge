@@ -612,7 +612,7 @@ implements SpeechletV2
 		
 		
 		if (m3.find()) {
-			String answer = m.group(3);
+			String answer = m3.group(3);
 			switch (answer) {
 			case "restaurant": ourUserIntent = UserIntent.Restaurant; break;
 			case "short conversations": ourUserIntent = UserIntent.Smalltalk; break;
@@ -634,7 +634,7 @@ implements SpeechletV2
 			ourUserIntent = UserIntent.No;
 		} else if (m23.find()) {
 			ourUserIntent = UserIntent.Yes;
-		}else if (m22.find()) {
+		}else if (m21.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if(cat==1){
