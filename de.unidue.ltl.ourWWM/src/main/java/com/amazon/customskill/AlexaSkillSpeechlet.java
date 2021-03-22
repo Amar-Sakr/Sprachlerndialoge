@@ -620,7 +620,7 @@ implements SpeechletV2
 			}
 		}
 		else if (m9.find()) {
-			String answer = m0.group(3);
+			String answer = m9.group(3);
 			switch (answer) {
 			case "sentences": ourUserIntent = UserIntent.Sätze; break;
 			case "dialogs": ourUserIntent = UserIntent.Dialoge; break;
