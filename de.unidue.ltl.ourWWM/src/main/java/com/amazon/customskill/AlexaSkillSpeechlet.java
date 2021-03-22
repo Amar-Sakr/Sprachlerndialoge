@@ -667,6 +667,7 @@ implements SpeechletV2
 				
 			}
 		}else {
+			logger.info("Error Pattern");
 			ourUserIntent = UserIntent.Error;
 		}
 		logger.info("set ourUserIntent to " +ourUserIntent);
