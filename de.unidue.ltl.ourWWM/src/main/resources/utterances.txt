@@ -10,6 +10,6 @@ correctMsg = That is correct
 continueMsg = Do you want to continue?
 goodbyeMsg = Good Bye.
 errorYesNoMsg = Sorry I did not understand that. Please say yes or no.
-errorAnswerMsg = I am sorry, but I did not understand that. Please try again.
+errorAnswerMsg = I am sorry, but I did not understand that. Can you repeat that?.
 dialogsFinishing = You successfully finished this conversation. Do you want to end this application?
 sentencesFinishing = You repeated all the sentences. Do you want to end this application now?
