@@ -73,6 +73,7 @@ implements SpeechletV2
 	private static boolean isRun = false;
 	static int famCheck = 0;
 	static boolean finished = false;
+	static ArrayList<String> output = new ArrayList<String>();
 
 	// Was der User gesagt hat
 	public static String userRequest;
@@ -141,7 +142,8 @@ implements SpeechletV2
 	{
 		logger.info("onLaunch");
 		recState = RecognitionState.YesNo;
-		return askUserResponse(utterances.get("famCheck"));	
+		output.add(utterances.get("famCheck")); 
+		return askUserResponse(output);	
 		
 	}
 
@@ -158,6 +160,7 @@ implements SpeechletV2
 			sätzeDeutsch = rs.getString("Deutsch");
 			question = rs.getString("Englisch");
 			logger.info("Extracted question from database: "+ question);
+			logger.info("Extracted german sentence: "+ sätzeDeutsch);
 		} catch (Exception e){
 			logger.info("Exception");
 			e.printStackTrace();}
@@ -243,13 +246,15 @@ implements SpeechletV2
 	private SpeechletResponse evaluateYesNo(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
+		output.clear();
 		switch (ourUserIntent) {
 		case Yes: {
 			if(isRun==false) {
 				isRun=true;
 			    famCheck=1; // means familiar user
 			    recState = RecognitionState.Gamemode;
-			    res = askUserResponse(utterances.get("gamemodeMsg"));
+			    output.add(utterances.get("gamemodeMsg"));
+			    res = askUserResponse(output);
 			    logger.info("familiarUserMsg");
 			    break;
 			}
@@ -261,33 +266,39 @@ implements SpeechletV2
 				recState = RecognitionState.Answer;
 				logger.info("rec State=Answer");
 				selectQuestion();
-				res = askUserResponse(question+""+responseWithFlavour(sätzeDeutsch,2));
+				output.add(question+".");
+				output.add(sätzeDeutsch);
+				res = askUserResponse(output);
 				break;
 			}
 		} case No: {
 			if(!isRun) {
 				isRun=true;
 				 recState = RecognitionState.Gamemode;
-				 res = askUserResponse(utterances.get("welcomeMsg"));
+				 output.add(utterances.get("welcomeMsg"));
+				 res = askUserResponse(output);
 				 logger.info("welcomeMsg");
 				 break;
 			}
 			else if(quit==0) {
 				quit=1;
 				recState = RecognitionState.YesNo;
-				res=askUserResponse("Do you want to end the application?");
+				output.add("Do you want to end the application?");
+				res=askUserResponse(output);
 				break;
 			}
 			else {
 				quit=0;
 				count=1;
 				recState = RecognitionState.Gamemode;
-				res = askUserResponse("Ok, what Gamemode do you want to try?"); 
+				output.add("Ok, what Gamemode do you want to try?");
+				res = askUserResponse(output); 
 				break;
 			}
 			
 		} default: {
-			res = askUserResponse(utterances.get("")); 
+			output.add("default");
+			res = askUserResponse(output); 
 			break;
 		}
 		}
@@ -298,6 +309,7 @@ implements SpeechletV2
 	private SpeechletResponse evaluateAnswer(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
+		output.clear();
 	
 		if(gameMode==1) {
 			switch(ourUserIntent) {
@@ -306,36 +318,47 @@ implements SpeechletV2
 				if(count % 3 == 0) {
 					count+=1;
 					recState = RecognitionState.YesNo;
-					res = askUserResponse(utterances.get("correctMsg")+" "+utterances.get("continueMsg"));
+					output.add(utterances.get("correctMsg")+",");
+					output.add(utterances.get("continueMsg"));
+					res = askUserResponse(output);
 					break;
 				}
 				else {
 					count+=1;
 					recState = RecognitionState.Answer;
 					selectQuestion();
-					res = askUserResponse(utterances.get("correctMsg") + " " + question + " " + sätzeDeutsch);
+					output.add(utterances.get("correctMsg")+",");
+					output.add(question+".");
+					output.add(sätzeDeutsch);
+					res = askUserResponse(output);
 					break;
 				}
 			}
 			case Error:{
 				logger.info("sätze error");
-				res = askUserResponse(utterances.get("errorAnswerMsg")+" "+question+" "+sätzeDeutsch);
+				output.add(utterances.get("errorAnswerMsg")+",");
+				output.add(question+".");
+				output.add(sätzeDeutsch);
+				res = askUserResponse(output);
 				break;
 			}
 			case Stop:{
 				quit = 1;
 				recState = RecognitionState.YesNo;
-				res = askUserResponse("Do you want to quit?");
+				output.add("Do you want to quit?");
+				res = askUserResponse(output);
 				break;
 			}
 			case Finished:{
 				quit = 1;
 				recState = RecognitionState.YesNo;
-				res = askUserResponse(utterances.get("sentencesFinishing"));
+				output.add(utterances.get("sentencesFinishing"));
+				res = askUserResponse(output);
 				break;
 			}
 			default:{
-				res = askUserResponse(utterances.get("errorAnswerMsg"));
+				output.add(utterances.get("errorAnswerMsg"));
+				res = askUserResponse(output);
 				break;
 			}
 			}
@@ -349,33 +372,40 @@ implements SpeechletV2
 				countD+=1;
 				recState = RecognitionState.Answer;
 				selectQuestion();
-				res = askUserResponse(question);
+				output.add(question);
+				res = askUserResponse(output);
 				break;
 			}
 			case Error:{
-				res = askUserResponse(utterances.get("wrongMsg")+" "+question);
+				output.add(utterances.get("wrongMsg")+",");
+				output.add(question);
+				res = askUserResponse(output);
 				break;
 			}
 			case Stop:{
 				quit = 1;
 				recState = RecognitionState.YesNo;
-				res = askUserResponse("Do you want to quit?");
+				output.add("Do you want to quit?");
+				res = askUserResponse(output);
 				break;
 			}
 			case Finished:{
 				quit = 1;
 				recState = RecognitionState.YesNo;
-				res = askUserResponse(utterances.get("dialogsFinishing"));
+				output.add(utterances.get("dialogsFinishing"));
+				res = askUserResponse(output);
 				break;
 			}
 			default:{
-				res = askUserResponse(utterances.get("errorAnswerMsg"));
+				output.add(utterances.get("errorAnswerMsg"));
+				res = askUserResponse(output);
 				break;
 			}
 			}
 		}
 		else {
-			res = askUserResponse(utterances.get("errorAnswerMsg"));
+			output.add(utterances.get("errorAnswerMsg"));
+			res = askUserResponse(output);
 		}
 		
 		return res;
@@ -383,27 +413,32 @@ implements SpeechletV2
 	private SpeechletResponse evaluateCategory(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
+		output.clear();
 		switch (ourUserIntent) {
 		case Smalltalk:{
 			cat = 1;
 			selectQuestion();
-			res = askUserResponse(question);
+			output.add(question);
+			res = askUserResponse(output);
 			break;
 		}
 		case Restaurant:{
 			cat = 2;
 			selectQuestion();
-			res = askUserResponse(question);
+			output.add(question);
+			res = askUserResponse(output);
 			break;
 		}
 		case Directions:{
 			cat = 3;
 			selectQuestion();
-			res = askUserResponse(question);
+			output.add(question);
+			res = askUserResponse(output);
 			break;
 		}
 		default: {
-			res = askUserResponse(utterances.get(""));
+			output.add(utterances.get("default"));
+			res = askUserResponse(output);
 			break;
 		}
 		}
@@ -414,17 +449,24 @@ implements SpeechletV2
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
 		logger.info("Gamemode");
+		output.clear();
 		switch (ourUserIntent) {
 		case Sätze:{
 			gameMode = 1;
 			selectQuestion();
 			recState = RecognitionState.Answer;
 			if(famCheck==1) {
-				res = askUserResponse(utterances.get("famSentenceMsg")+" "+question+", "+sätzeDeutsch);
+				output.add(utterances.get("famSentenceMsg"));
+				output.add(question+".");
+				output.add(sätzeDeutsch);
+				res = askUserResponse(output);
 				break;
 			}else {
-			res = askUserResponse(utterances.get("sentenceMsg")+" "+question+", "+sätzeDeutsch);
-			break;
+				output.add(utterances.get("sentenceMsg")+",");
+				output.add(question+".");
+				output.add(sätzeDeutsch);
+				res = askUserResponse(output);
+				break;
 			}
 		}
 		case Dialoge:{
@@ -432,15 +474,18 @@ implements SpeechletV2
 			logger.info("Dialoge gamemode");
 			recState = RecognitionState.Category;
 			if(famCheck==1) {
-				res = askUserResponse(utterances.get("familiarUserDialogsMsg"));
+				output.add(utterances.get("familiarUserDialogsMsg"));
+				res = askUserResponse(output);
 				break;
 			}else {
-			res = askUserResponse(utterances.get("dialogsCategoryMsg"));
-			break;
+				output.add(utterances.get("dialogsCategoryMsg"));
+				res = askUserResponse(output);
+				break;
 			}
 		}
 		default: {
-			res = askUserResponse(utterances.get("error"));
+			output.add(utterances.get("error"));
+			res = askUserResponse(output);
 			break;
 		}
 		}
@@ -663,6 +708,7 @@ implements SpeechletV2
 		isRun = false;
 		finished = false;
 		cat=0;
+		output.clear();
 		// Create the plain text output.
 		PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
 		speech.setText(text);
@@ -676,11 +722,19 @@ implements SpeechletV2
 	 * @param text
 	 * @return
 	 */
-	private SpeechletResponse askUserResponse(String text)
+	private SpeechletResponse askUserResponse(ArrayList<String> text)
 	{
 		SsmlOutputSpeech speech = new SsmlOutputSpeech();
-		speech.setSsml("<speak>" + text + "</speak>");
-
+		SsmlOutputSpeech speech1 = new SsmlOutputSpeech();
+		SsmlOutputSpeech speech2 = new SsmlOutputSpeech();
+		if(text.contains(sätzeDeutsch)) {
+			text.remove(sätzeDeutsch);
+			speech.setSsml("<speak>"+text.toString()+"<voice name=\"Vicki\"><lang xml:lang=\"de-DE\">"+sätzeDeutsch+"</lang></voice></speak>");
+		}
+		else {
+			speech.setSsml("<speak>" + text.toString() + "</speak>");
+		}
+		
 		// reprompt after 8 seconds
 		SsmlOutputSpeech repromptSpeech = new SsmlOutputSpeech();
 		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> are you still here?</speak>");
