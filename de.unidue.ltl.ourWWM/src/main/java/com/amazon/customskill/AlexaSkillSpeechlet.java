@@ -611,7 +611,7 @@ implements SpeechletV2
 		
 		
 		
-		if (m.find()) {
+		if (m3.find()) {
 			String answer = m.group(3);
 			switch (answer) {
 			case "restaurant": ourUserIntent = UserIntent.Restaurant; break;
@@ -619,7 +619,7 @@ implements SpeechletV2
 			case "directions": ourUserIntent = UserIntent.Directions; break;
 			}
 		}
-		else if (m0.find()) {
+		else if (m9.find()) {
 			String answer = m0.group(3);
 			switch (answer) {
 			case "sentences": ourUserIntent = UserIntent.Sätze; break;
@@ -649,7 +649,7 @@ implements SpeechletV2
 
 		}else if(cat==2){
 			logger.info("Dialoge Matcher Restaurant");
-			if (m1.find()|m14.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+			if (m1.find()|m14.find()|m15.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
@@ -660,8 +660,6 @@ implements SpeechletV2
 			logger.info("Dialoge Matcher Directions");
 			if (m0.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
 				logger.info("match");
-
-			
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
 				}
