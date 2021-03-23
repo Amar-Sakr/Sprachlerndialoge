@@ -66,7 +66,7 @@ implements SpeechletV2
 	static int count = 1;
 	static int countD = 2;
 	static int rowsST = 8;
-	static int rowsR = 11;
+	static int rowsR = 10;
 	static int rowsD=4;
 	static int rowsS=33;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
@@ -290,6 +290,8 @@ implements SpeechletV2
 			else {
 				quit=0;
 				count=1;
+				countD=1;
+				output.clear();
 				recState = RecognitionState.Gamemode;
 				output.add("Ok, what Gamemode do you want to try?");
 				res = askUserResponse(output); 
