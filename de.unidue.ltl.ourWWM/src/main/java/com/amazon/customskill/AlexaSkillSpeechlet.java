@@ -528,7 +528,7 @@ implements SpeechletV2
 		logger.info("Patternsuche");
 		String pattern = "go|turn|(i do not know)|((sorry)? i am not from here)|it(‘s|is)"; //address
 		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
-		String pattern1 = "(i (would like)? (want)? to drink) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
+		String pattern1 = "(i (would like)? (want)?)? | ([a-z]+)"; //drink
 		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern3 = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
 		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of ))"; //hobbies
