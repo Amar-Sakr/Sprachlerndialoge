@@ -526,28 +526,28 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		logger.info("Patternsuche");
-		String pattern = "(((you have to )? (go |turn ) [a-z]+) | (i (don’t| do not) know) | ((sorry )?(i am not from here))| (it(‘s|is) [a-z]+))"; //address
+		String pattern = "(((you have to )? (go |turn ))|(i do not know)| ((sorry )?(i am not from here))| (it(‘s|is)))"; //address
 		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
-		String pattern1 = "(i (would like)? (want)? to drink [a-z]+) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
+		String pattern1 = "(i (would like)? (want)? to drink) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
 		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern3 = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
-		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of )) ([a-z]+)"; //hobbies
+		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of ))"; //hobbies
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
 		String pattern6 = "(yes |no )?  ((i am (not)? single )|(i have a (girlfriend|boyfriend|wife|husband)))"; // are you single
 		String pattern7 = "i (don’t |do not ) (want to |wanna ) (tell |say ) (you )?(this|that)?";
-		String pattern8 = "(i am |i work as |i am working as )?(a student|an assistant|([a-z])+)"; //work
+		String pattern8 = "(i am |i work as |i am working as )?(a student|an assistant)"; //work
 		String pattern9 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
-		String pattern10 = "(oh |well )?(I am from )? [a-z]+ ( how about you| and you)?"; // where are you from
-		String pattern11 = "(hello |hi )? (my name is |i am )? ([a-z]+) ( and you)?"; // name
+		String pattern10 = "(oh |well )?(I am from )? (germany|egypt) ( how about you| and you)?"; // where are you from
+		String pattern11 = "(hello |hi )? (my name is |i am ) ( and you)?"; // name
 		String pattern12 = "(No )?(i don`t ((have a job)|work)|i am jobless)";
 		String pattern13 = "i don’t have ((any( favorite color)?)|one)"; //color
-		String pattern14 = "(good but )?i want to eat [a-z]+"; //what do you want to eat
+		String pattern14 = "(good but )?i want to eat"; //what do you want to eat
 		String pattern15 = "(i want to pay )? (cash|card) "; //paying
 		String pattern16 = "(hello | hi) (my name is)?"; //Restaurant intro reply
 		String pattern17 = "i am alone |  (we are )?\\d"; // how many are you
 		String pattern18 = "you too|thanks| thank you";
-		String pattern19 = "(yes | no | sure) [a-z]*";
-		String pattern20 = "(okay | ok)  [a-z]*";
+		String pattern19 = "yes|no|sure";
+		String pattern20 = "okay|ok";
 		String pattern21 = "i want to do something else";
 		String pattern22 = "(good)? bye";
 		String pattern23 = "\\byes\\b";
@@ -640,7 +640,7 @@ implements SpeechletV2
 		}else if(cat==1){
 			logger.info("Dialoge Matcher Short Conversation");
 			if (m0.find()|m2.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m10.find()|
-				m11.find()|m12.find()|m13.find()|m18.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+				m11.find()|m12.find()|m13.find()|m18.find()|m20.find()|m22.find()) {
 				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
@@ -650,7 +650,7 @@ implements SpeechletV2
 
 		}else if(cat==2){
 			logger.info("Dialoge Matcher Restaurant");
-			if (m1.find()|m14.find()|m15.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+			if (m1.find()|m14.find()|m15.find()|m16.find()|m17.find()|m18.find()|m19.find()|m20.find()|m22.find()) {
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
@@ -659,7 +659,7 @@ implements SpeechletV2
 
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
-			if (m.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+			if (m.find()|m19.find()|m20.find()|m22.find()) {
 				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
@@ -667,6 +667,10 @@ implements SpeechletV2
 				}
 				
 			}
+		}else if (m24.find()) {
+			ourUserIntent = UserIntent.No;
+		} else if (m23.find()) {
+			ourUserIntent = UserIntent.Yes;
 		}else {
 			logger.info("Error Pattern");
 			ourUserIntent = UserIntent.Error;
