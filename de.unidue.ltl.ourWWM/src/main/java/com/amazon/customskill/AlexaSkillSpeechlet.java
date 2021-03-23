@@ -526,7 +526,7 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		logger.info("Patternsuche");
-		String pattern = "(((you have to )? (go |turn ))|(i do not know)| ((sorry )?(i am not from here))| (it(‘s|is)))"; //address
+		String pattern = "(((you have to)? (go|turn))|(i do not know)| ((sorry )?(i am not from here))| (it(‘s|is)))"; //address
 		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
 		String pattern1 = "(i (would like)? (want)? to drink) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
 		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
@@ -546,7 +546,7 @@ implements SpeechletV2
 		String pattern16 = "(hello | hi) (my name is)?"; //Restaurant intro reply
 		String pattern17 = "i am alone |  (we are )?\\d"; // how many are you
 		String pattern18 = "you too|thanks| thank you";
-		String pattern19 = "yes|no|sure";
+		String pattern19 = "\\byes\\b|\\bno\\b|sure";
 		String pattern20 = "okay|ok";
 		String pattern21 = "i want to do something else";
 		String pattern22 = "(good)? bye";
@@ -630,11 +630,11 @@ implements SpeechletV2
 			if(finished==true) {
 				ourUserIntent = UserIntent.Finished;
 			}
-		}else if (m24.find()) {
+		}/*else if (m24.find()) {
 			ourUserIntent = UserIntent.No;
 		} else if (m23.find()) {
 			ourUserIntent = UserIntent.Yes;
-		}else if (m21.find()) {
+		}*/else if (m21.find()) {
 			ourUserIntent = UserIntent.Stop;
 		
 		}else if(cat==1){
