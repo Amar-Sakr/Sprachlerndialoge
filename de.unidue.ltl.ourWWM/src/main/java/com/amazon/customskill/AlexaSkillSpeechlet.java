@@ -526,8 +526,8 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		logger.info("Patternsuche");
-		String pattern = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
-		String pattern0 = "(((you have to )? (go |turn ) [a-z]+) | (i (don’t| do not) know) | ((sorry )?(i am not from here))| (it(‘s|is) [a-z]+))"; //address 
+		String pattern = "(((you have to )? (go |turn ) [a-z]+) | (i (don’t| do not) know) | ((sorry )?(i am not from here))| (it(‘s|is) [a-z]+))"; //address
+		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
 		String pattern1 = "(i (would like)? (want)? to drink [a-z]+) | (beer | vine | cola | fanta | sprite | coffee | whisky | water)"; //drink
 		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern3 = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
@@ -639,8 +639,9 @@ implements SpeechletV2
 		
 		}else if(cat==1){
 			logger.info("Dialoge Matcher Short Conversation");
-			if (m.find()|m2.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m10.find()|
+			if (m0.find()|m2.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m10.find()|
 				m11.find()|m12.find()|m13.find()|m18.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
 					ourUserIntent = UserIntent.Finished;
@@ -658,7 +659,7 @@ implements SpeechletV2
 
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
-			if (m0.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
+			if (m.find()|m19.find()|m20.find()|m21.find()|m22.find()|m23.find()|m24.find()) {
 				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
