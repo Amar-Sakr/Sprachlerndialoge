@@ -61,8 +61,8 @@ implements SpeechletV2
 	static String question = "";
 	static String correctAnswer = "";
 	static String s‰tzeDeutsch = "";
-	static int cat; 
-	static int gameMode;
+	static int cat=0; 
+	static int gameMode=0;
 	static int count = 1;
 	static int countD = 2;
 	static int rowsST = 8;
@@ -236,7 +236,7 @@ implements SpeechletV2
 		switch (recState) {
 		case Answer: resp = evaluateAnswer(userRequest); break;
 		case YesNo: resp = evaluateYesNo(userRequest); break;
-		case Category: resp = evaluateCategory(userRequest); recState = RecognitionState.Answer; break;
+		case Category: resp = evaluateCategory(userRequest);break;
 		case Gamemode: resp = evaluateGamemode(userRequest);break;
 		default: resp = tellUserAndFinish("Erkannter Text: " + userRequest);break;
 		}   
@@ -247,6 +247,7 @@ implements SpeechletV2
 	// Wenn Ja, stelle die n√§chste Frage
 	// Wenn Nein, verabschiede den user
 	private SpeechletResponse evaluateYesNo(String userRequest) {
+		gameMode=0;
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
 		output.clear();
@@ -358,6 +359,7 @@ implements SpeechletV2
 				quit = 1;
 				countD=1;
 				count=1;
+				cat=0;
 				recState = RecognitionState.YesNo;
 				output.add(utterances.get("sentencesFinishing"));
 				res = askUserResponse(output);
@@ -391,6 +393,7 @@ implements SpeechletV2
 			}
 			case Stop:{
 				quit = 1;
+				cat=0;
 				recState = RecognitionState.YesNo;
 				output.add("Do you want to quit?");
 				res = askUserResponse(output);
@@ -425,6 +428,7 @@ implements SpeechletV2
 		output.clear();
 		switch (ourUserIntent) {
 		case Smalltalk:{
+			recState = RecognitionState.Answer;
 			cat = 1;
 			selectQuestion();
 			output.add(question);
@@ -432,6 +436,7 @@ implements SpeechletV2
 			break;
 		}
 		case Restaurant:{
+			recState = RecognitionState.Answer;
 			cat = 2;
 			selectQuestion();
 			output.add(question);
@@ -439,6 +444,7 @@ implements SpeechletV2
 			break;
 		}
 		case Directions:{
+			recState = RecognitionState.Answer;
 			cat = 3;
 			selectQuestion();
 			output.add(question);
@@ -446,7 +452,7 @@ implements SpeechletV2
 			break;
 		}
 		default: {
-			output.add(utterances.get("default"));
+			output.add("Sorry, please say conversation, restaurant or directions");
 			res = askUserResponse(output);
 			break;
 		}
@@ -493,7 +499,7 @@ implements SpeechletV2
 			}
 		}
 		default: {
-			output.add(utterances.get("error"));
+			output.add("Sorry, please say sentences or dialogs");
 			res = askUserResponse(output);
 			break;
 		}
@@ -532,7 +538,7 @@ implements SpeechletV2
 		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
 		String pattern1 = "(i (would like)? (want)?)? | ([a-z]+)"; //drink
 		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
-		String pattern3 = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
+		String pattern3 = "(i want to play )?(on|the )?(restaurant|small conversation|directions)( difficulty)?( please)?";
 		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of ))"; //hobbies
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i donít have (any)?)?( hobbies)?"; //hobbies
 		String pattern6 = "(yes |no )?((i am (not)?single )|(i have a (girlfriend|boyfriend|wife|husband)))"; // are you single
@@ -617,7 +623,7 @@ implements SpeechletV2
 			String answer = m3.group(3);
 			switch (answer) {
 			case "restaurant": ourUserIntent = UserIntent.Restaurant; break;
-			case "short conversations": ourUserIntent = UserIntent.Smalltalk; break;
+			case "small conversation": ourUserIntent = UserIntent.Smalltalk; break;
 			case "directions": ourUserIntent = UserIntent.Directions; break;
 			}
 		}
@@ -627,22 +633,30 @@ implements SpeechletV2
 			case "sentences": ourUserIntent = UserIntent.S‰tze; break;
 			case "dialogs": ourUserIntent = UserIntent.Dialoge; break;
 			}
-		}else if(userRequest.equals(question)) {
-			ourUserIntent = UserIntent.Correct;
-			if(finished==true) {
-				ourUserIntent = UserIntent.Finished;
+		}else if(gameMode==1) {
+			if(userRequest.equals(question)) {
+				ourUserIntent = UserIntent.Correct;
+				if(finished==true) {
+					ourUserIntent = UserIntent.Finished;
+				}
+			}else if (m21.find()) {
+				ourUserIntent = UserIntent.Stop;
+			}else {
+				ourUserIntent = UserIntent.Error;
 			}
-		}else if (m24.find()) {
-			ourUserIntent = UserIntent.No;
-		} else if (m23.find()) {
-			ourUserIntent = UserIntent.Yes;
+		
+		}else if(cat==0){	
+			if (m24.find()) {
+				ourUserIntent = UserIntent.No;
+			}else if (m23.find()) {
+				ourUserIntent = UserIntent.Yes;
+			}
 		}else if (m21.find()) {
 			ourUserIntent = UserIntent.Stop;
-		
 		}else if(cat==1){
-			logger.info("Dialoge Matcher Short Conversation");
+			logger.info("Dialoge Matcher Conversation");
 			if (m0.find()|m2.find()|m4.find()|m5.find()|m6.find()|m7.find()|m8.find()|m10.find()|
-				m11.find()|m12.find()|m13.find()|m18.find()|m20.find()|m22.find()) {
+				m11.find()|m12.find()|m13.find()|m18.find()|m19.find()|m20.find()|m22.find()) {
 				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
@@ -661,7 +675,7 @@ implements SpeechletV2
 
 		}else if(cat==3){
 			logger.info("Dialoge Matcher Directions");
-			if (m.find()|m19.find()|m20.find()|m22.find()) {
+			if (m.find()|m18.find()|m19.find()|m20.find()|m22.find()) {
 				logger.info("match");
 				ourUserIntent = UserIntent.Correct;
 				if(finished==true) {
@@ -669,11 +683,7 @@ implements SpeechletV2
 				}
 				
 			}
-		}/*else if (m24.find()) {
-			ourUserIntent = UserIntent.No;
-		} else if (m23.find()) {
-			ourUserIntent = UserIntent.Yes;
-		}*/else {
+		}else {
 			logger.info("Error Pattern");
 			ourUserIntent = UserIntent.Error;
 		}
@@ -742,7 +752,7 @@ implements SpeechletV2
 		
 		// reprompt after 8 seconds
 		SsmlOutputSpeech repromptSpeech = new SsmlOutputSpeech();
-		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> are you still here?</speak>");
+		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> say something please</speak>");
 
 		Reprompt rep = new Reprompt();
 		rep.setOutputSpeech(repromptSpeech);
