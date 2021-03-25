@@ -284,13 +284,6 @@ implements SpeechletV2
 				 logger.info("welcomeMsg");
 				 break;
 			}
-			else if(quit==0) {
-				quit=1;
-				recState = RecognitionState.YesNo;
-				output.add("Do you want to end the application?");
-				res=askUserResponse(output);
-				break;
-			}
 			else {
 				quit=0;
 				count=1;
@@ -403,6 +396,7 @@ implements SpeechletV2
 				quit = 1;
 				countD=1;
 				count=1;
+				cat=0;
 				recState = RecognitionState.YesNo;
 				output.add(utterances.get("dialogsFinishing"));
 				res = askUserResponse(output);
