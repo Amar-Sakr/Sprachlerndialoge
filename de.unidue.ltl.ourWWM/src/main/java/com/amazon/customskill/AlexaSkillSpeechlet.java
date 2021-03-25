@@ -175,11 +175,12 @@ implements SpeechletV2
 				con = DBConnection.getConnection2();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT * FROM DialogeLeicht");
-				for (int i=1; i<countD;i++) {
+					for (int i=1; i<countD;i++) {
 					rs.next();
 					logger.info("for schleife");
 				}
 				question = rs.getString("Alexa");
+		//		rs.next();
 			}
 			else if (cat==2) {
 				isFinished(countD);
@@ -192,6 +193,7 @@ implements SpeechletV2
 					rs1.next();
 				}
 				question = rs1.getString("Alexa");
+				//rs1.next();
 			}
 			else if (cat==3) {
 				isFinished(countD);
@@ -204,6 +206,7 @@ implements SpeechletV2
 					rs2.next();
 				}
 				question = rs2.getString("Alexa");
+				//rs2.next();
 			}
 			else {
 				logger.info("Error in Category selection");
@@ -353,6 +356,8 @@ implements SpeechletV2
 			}
 			case Finished:{
 				quit = 1;
+				countD=1;
+				count=1;
 				recState = RecognitionState.YesNo;
 				output.add(utterances.get("sentencesFinishing"));
 				res = askUserResponse(output);
@@ -393,6 +398,8 @@ implements SpeechletV2
 			}
 			case Finished:{
 				quit = 1;
+				countD=1;
+				count=1;
 				recState = RecognitionState.YesNo;
 				output.add(utterances.get("dialogsFinishing"));
 				res = askUserResponse(output);
@@ -497,26 +504,19 @@ implements SpeechletV2
 		if(cat==1) {
 			if(count>rowsST) {
 				finished = true;
-			}else {
-				
 			}
 		}else if(cat==2) {
 			if(count>rowsR) {
 				finished = true;
-			}else {
 				
 			}
 		}else if(cat==3) {
 			if(count>rowsD) {
 				finished = true;
-			}else {
-				
 			}
 		}else {
 			if(count>rowsS) {
 				finished = true;
-			}else {
-				
 			}
 		}
 		return finished;
@@ -535,19 +535,19 @@ implements SpeechletV2
 		String pattern3 = "(i want to play )?(on|the )?(restaurant|short conversations|directions)( difficulty)?( please)?";
 		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of ))"; //hobbies
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
-		String pattern6 = "(yes |no )?  ((i am (not)? single )|(i have a (girlfriend|boyfriend|wife|husband)))"; // are you single
-		String pattern7 = "i (don’t |do not ) (want to |wanna ) (tell |say ) (you )?(this|that)?";
+		String pattern6 = "(yes |no )?((i am (not)?single )|(i have a (girlfriend|boyfriend|wife|husband)))"; // are you single
+		String pattern7 = "i (don’t|do not) (want to|wanna) (tell|say) (you )?(this|that)?";
 		String pattern8 = "(i am |i work as |i am working as )?(a student|an assistant)"; //work
 		String pattern9 = "(i want to play )?(the )?(sentences|dialogs)( mode)?( please)?";
-		String pattern10 = "(oh |well )?(I am from )? (germany|egypt) ( how about you| and you)?"; // where are you from
-		String pattern11 = "(hello |hi )? (my name is |i am ) ( and you)?"; // name
+		String pattern10 = "(oh |well )?(I am from )?(germany|egypt)( how about you| and you)?"; // where are you from
+		String pattern11 = "(hello |hi )?(my name is|i am)"; // name
 		String pattern12 = "(No )?(i don`t ((have a job)|work)|i am jobless)";
 		String pattern13 = "i don’t have ((any( favorite color)?)|one)"; //color
 		String pattern14 = "(good but )?i want to eat"; //what do you want to eat
 		String pattern15 = "(i want to pay )? (cash|card) "; //paying
-		String pattern16 = "(hello | hi) (my name is)?"; //Restaurant intro reply
-		String pattern17 = "i am alone |  (we are )?\\d"; // how many are you
-		String pattern18 = "you too|thanks| thank you";
+		String pattern16 = "(hello|hi) (my name is)?"; //Restaurant intro reply
+		String pattern17 = "i am alone|(we are )?\\d"; // how many are you
+		String pattern18 = "you too|thanks|thank you";
 		String pattern19 = "\\byes\\b|\\bno\\b|sure";
 		String pattern20 = "okay|ok";
 		String pattern21 = "i want to do something else";
