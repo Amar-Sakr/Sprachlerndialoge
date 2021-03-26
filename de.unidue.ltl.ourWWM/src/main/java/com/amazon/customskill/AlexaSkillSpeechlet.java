@@ -65,10 +65,6 @@ implements SpeechletV2
 	static int gameMode=0;
 	static int count = 1;
 	static int countD = 2;
-	static int rowsST = 8;
-	static int rowsR = 10;
-	static int rowsD=4;
-	static int rowsS=33;
 	static int quit = 0; //0=weiter, 1=zurück ins menü oder beenden
 	private static boolean isRun = false;
 	static int famCheck = 0;
@@ -149,6 +145,7 @@ implements SpeechletV2
 
 	// Ziehe eine Frage aus der Datenbank.
 	private void selectQuestion() {
+		//für game mode Sentences
 		if(gameMode==1) {
 		isFinished(count);
 		try {
@@ -165,9 +162,11 @@ implements SpeechletV2
 			logger.info("Exception");
 			e.printStackTrace();}
 		}
-		//noch nicht korrekt
+		
 		else if(gameMode==2){
+		//für dialoge game mode
 		try {
+			//small conversation
 			if (cat==1) {
 				logger.info("Count: "+countD);
 				isFinished(countD);
@@ -180,9 +179,10 @@ implements SpeechletV2
 					logger.info("for schleife");
 				}
 				question = rs.getString("Alexa");
-		//		rs.next();
+		
 			}
 			else if (cat==2) {
+				//restaurant
 				isFinished(countD);
 				logger.info("Finished: "+finished);
 				con = DBConnection.getConnection2();
@@ -196,6 +196,7 @@ implements SpeechletV2
 				//rs1.next();
 			}
 			else if (cat==3) {
+				//directions
 				isFinished(countD);
 				logger.info("Finished: "+finished);
 				con = DBConnection.getConnection2();
@@ -206,7 +207,7 @@ implements SpeechletV2
 					rs2.next();
 				}
 				question = rs2.getString("Alexa");
-				//rs2.next();
+		
 			}
 			else {
 				logger.info("Error in Category selection");
@@ -243,7 +244,7 @@ implements SpeechletV2
 		return resp;
 	}
 
-	// Ja/Nein-Fragen kommen genau dann vor, wenn wir wissen wollen, ob der User weitermachen will.
+	// Ja/Nein-Fragen kommen genau dann vor, wenn wir wissen wollen, ob der User weitermachen will, wenn er gefragt wird ob er die Anwendung beenden will oder ob er bereits vertraut mit ihr ist
 	// Wenn Ja, stelle die nÃ¤chste Frage
 	// Wenn Nein, verabschiede den user
 	private SpeechletResponse evaluateYesNo(String userRequest) {
@@ -253,6 +254,7 @@ implements SpeechletV2
 		output.clear();
 		switch (ourUserIntent) {
 		case Yes: {
+			//User beantwortet Vertrautheit mit Ja 
 			if(isRun==false) {
 				isRun=true;
 			    famCheck=1; // means familiar user
@@ -262,11 +264,13 @@ implements SpeechletV2
 			    logger.info("familiarUserMsg");
 			    break;
 			}
+			//falls er auf die frage, ob er die Anwendung beenden will, ja antwortet
 			else if(quit==1) {
 				res = tellUserAndFinish(utterances.get("goodbyeMsg"));
 				break;
 			}
 			else {
+				//wenn er mit den sätzen fortfahren möchte
 				recState = RecognitionState.Answer;
 				logger.info("rec State=Answer");
 				selectQuestion();
@@ -276,6 +280,7 @@ implements SpeechletV2
 				break;
 			}
 		} case No: {
+			//nicht vertraut
 			if(!isRun) {
 				isRun=true;
 				 recState = RecognitionState.Gamemode;
@@ -284,6 +289,7 @@ implements SpeechletV2
 				 logger.info("welcomeMsg");
 				 break;
 			}
+			//möchte anwendung nicht beenden
 			else {
 				quit=0;
 				count=1;
@@ -296,7 +302,7 @@ implements SpeechletV2
 			}
 			
 		} default: {
-			output.add("default");
+			output.add("Sorry, please say yes or no.");
 			res = askUserResponse(output); 
 			break;
 		}
@@ -311,9 +317,11 @@ implements SpeechletV2
 		output.clear();
 	
 		if(gameMode==1) {
+			//Sätze
 			switch(ourUserIntent) {
 			case Correct:{
 				logger.info("User answer recognized as correct.");
+				//nach 3 korrekten antworten wir nutzer gefragt ob er weitermachen möchte
 				if(count % 3 == 0) {
 					count+=1;
 					recState = RecognitionState.YesNo;
@@ -342,6 +350,7 @@ implements SpeechletV2
 				break;
 			}
 			case Stop:{
+				//falls nutzer mittendrin aufhören möchte 
 				quit = 1;
 				recState = RecognitionState.YesNo;
 				output.add("Do you want to quit?");
@@ -349,6 +358,7 @@ implements SpeechletV2
 				break;
 			}
 			case Finished:{
+				//nutzer hat alle sätze wiederholt
 				quit = 1;
 				countD=1;
 				count=1;
@@ -359,13 +369,17 @@ implements SpeechletV2
 				break;
 			}
 			default:{
-				output.add(utterances.get("errorAnswerMsg"));
+				//quasi error
+				output.add(utterances.get("errorAnswerMsg")+",");
+				output.add(question+".");
+				output.add(sätzeDeutsch);
 				res = askUserResponse(output);
 				break;
 			}
 			}
 		}
-
+		//dialoge
+		//beinahe gleicher aufbau wie oben, nur ohne counter
 		else if(gameMode==2) {
 			logger.info("User Intent: "+ourUserIntent);
 			switch(ourUserIntent) {
@@ -416,11 +430,13 @@ implements SpeechletV2
 		
 		return res;
 	}
+	//dialoge auswahl welche category
 	private SpeechletResponse evaluateCategory(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
 		output.clear();
 		switch (ourUserIntent) {
+		//short conversations
 		case Smalltalk:{
 			recState = RecognitionState.Answer;
 			cat = 1;
@@ -453,7 +469,7 @@ implements SpeechletV2
 		}
 		return res;
 	}
-	
+	//auswahl des game modes
 	private SpeechletResponse evaluateGamemode(String userRequest) {
 		SpeechletResponse res = null;
 		recognizeUserIntent(userRequest);
@@ -461,6 +477,7 @@ implements SpeechletV2
 		output.clear();
 		switch (ourUserIntent) {
 		case Sätze:{
+			//wird gestartet
 			gameMode = 1;
 			selectQuestion();
 			recState = RecognitionState.Answer;
@@ -479,6 +496,7 @@ implements SpeechletV2
 			}
 		}
 		case Dialoge:{
+			//wird gestartet
 			gameMode = 2;
 			logger.info("Dialoge gamemode");
 			recState = RecognitionState.Category;
@@ -500,22 +518,23 @@ implements SpeechletV2
 		}
 		return res;
 	}
+	//testet ob man das ende der Datenbank erreicht hat
 	private boolean isFinished(int count) {
 		if(cat==1) {
-			if(count>rowsST) {
+			if(count>8) {
 				finished = true;
 			}
 		}else if(cat==2) {
-			if(count>rowsR) {
+			if(count>10) {
 				finished = true;
 				
 			}
 		}else if(cat==3) {
-			if(count>rowsD) {
+			if(count>4) {
 				finished = true;
 			}
 		}else {
-			if(count>rowsS) {
+			if(count>33) {
 				finished = true;
 			}
 		}
@@ -694,6 +713,7 @@ implements SpeechletV2
 	@Override
 	public void onSessionEnded(SpeechletRequestEnvelope<SessionEndedRequest> requestEnvelope)
 	{
+		//notwendig damit sich alles zurücksetzt
 		quit = 0;
 		count = 1; 
 		countD = 2;
@@ -712,6 +732,7 @@ implements SpeechletV2
 	 */
 	private SpeechletResponse tellUserAndFinish(String text)
 	{
+		//doppelt hält besser
 		quit = 0;
 		count = 1; 
 		countD = 2;
@@ -738,6 +759,7 @@ implements SpeechletV2
 		SsmlOutputSpeech speech = new SsmlOutputSpeech();
 		if(text.contains(sätzeDeutsch)) {
 			text.remove(sätzeDeutsch);
+			//damit der deutsche teil auch auf deutsch ausgegeben wird
 			speech.setSsml("<speak>"+text.toString()+"<voice name=\"Vicki\"><lang xml:lang=\"de-DE\">"+sätzeDeutsch+"</lang></voice></speak>");
 		}
 		else {
@@ -760,28 +782,4 @@ implements SpeechletV2
 	 * @param i
 	 * @return
 	 */
-	private SpeechletResponse responseWithFlavour(String text, int i) {
-		SsmlOutputSpeech speech = new SsmlOutputSpeech();
-		switch(i){ 
-		case 0: 
-			speech.setSsml("<speak><amazon:effect name=\"whispered\">" + text + "</amazon:effect></speak>");
-			break; 
-		case 1: 
-			speech.setSsml("<speak><lang xml:lang=de-DE>"+ text +"</lang></speak>");
-			break; 
-		case 2: 
-			String firstNoun="erstes Wort buchstabiert";
-			String firstN=text.split(" ")[3];
-			speech.setSsml("<speak>"+firstNoun+ "<say-as interpret-as=\"spell-out\">"+firstN+"</say-as>"+"</speak>");
-			break; 
-		case 3: 
-			speech.setSsml("<speak><audio src='soundbank://soundlibrary/transportation/amzn_sfx_airplane_takeoff_whoosh_01'/></speak>");
-			break;
-		default: 
-			speech.setSsml("<speak><amazon:effect name=\"whispered\">" + text + "</amazon:effect></speak>");
-		} 
-
-		return SpeechletResponse.newTellResponse(speech);
-	}
-
 }
