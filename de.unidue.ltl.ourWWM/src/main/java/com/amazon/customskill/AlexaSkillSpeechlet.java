@@ -520,21 +520,21 @@ implements SpeechletV2
 	}
 	//testet ob man das ende der Datenbank erreicht hat
 	private boolean isFinished(int count) {
-		if(cat==1) {
+		if(cat==1) {//small conversation
 			if(count>8) {
 				finished = true;
 			}
-		}else if(cat==2) {
+		}else if(cat==2) {//restaurant
 			if(count>10) {
 				finished = true;
 				
 			}
-		}else if(cat==3) {
+		}else if(cat==3) {//directions
 			if(count>4) {
 				finished = true;
 			}
 		}else {
-			if(count>33) {
+			if(count>33) {//sätze
 				finished = true;
 			}
 		}
