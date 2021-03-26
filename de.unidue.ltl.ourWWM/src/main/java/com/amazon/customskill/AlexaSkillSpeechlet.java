@@ -528,10 +528,10 @@ implements SpeechletV2
 	void recognizeUserIntent(String userRequest) {
 		userRequest = userRequest.toLowerCase();
 		logger.info("Patternsuche");
-		String pattern = "go|turn|(i do not know)|((sorry)? i am not from here)|it(‘s|is)"; //address
+		String pattern = "go|turn|(i do not know)|((sorry )?i am not from here)|it(‘s|is)"; //address
 		String pattern0 = "(i (can )?speak |i am speaking )?((german|english|french|spanish|turkish|arabic)+( and )?(german|english|french|spanish|turkish|arabic)?)"; //which languages
 		String pattern1 = "(i (would like)? (want)?)? | ([a-z]+)"; //drink
-		String pattern2 = "(my favorite (color|one) is)?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
+		String pattern2 = "(my favorite (color|one) is )?(blue|yellow|green|red|violet|black|white|orange|brown|gray|pink)"; //fav color
 		String pattern3 = "(i want to play )?(on|the )?(restaurant|small conversation|directions)( difficulty)?( please)?";
 		String pattern4 = "((my (hobbies are |hobby is )) | (i (like |love )) | (i am a fan of ))"; //hobbies
 		String pattern5 = "(oh |well |ehm )?(no |yes )(i have|i have not|i don’t have (any)?)?( hobbies)?"; //hobbies
@@ -544,14 +544,14 @@ implements SpeechletV2
 		String pattern12 = "(No )?(i don`t ((have a job)|work)|i am jobless)";
 		String pattern13 = "i don’t have ((any( favorite color)?)|one)"; //color
 		String pattern14 = "(good but )?i want to eat"; //what do you want to eat
-		String pattern15 = "(i want to pay )? (cash|card) "; //paying
-		String pattern16 = "(hello|hi) (my name is)?"; //Restaurant intro reply
+		String pattern15 = "(i want to pay )?(cash|card)"; //paying
+		String pattern16 = "(hello|hi)( my name is)?"; //Restaurant intro reply
 		String pattern17 = "i am alone|(we are )?\\d"; // how many are you
 		String pattern18 = "you too|thanks|thank you";
 		String pattern19 = "\\byes\\b|\\bno\\b|sure";
 		String pattern20 = "okay|ok";
 		String pattern21 = "i want to do something else";
-		String pattern22 = "(good)? bye";
+		String pattern22 = "(good )?bye";
 		String pattern23 = "\\byes\\b";
 		String pattern24 = "\\bno\\b";
 
