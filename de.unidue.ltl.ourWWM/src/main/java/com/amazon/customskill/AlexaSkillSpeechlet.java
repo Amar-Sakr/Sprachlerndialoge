@@ -746,7 +746,7 @@ implements SpeechletV2
 		
 		// reprompt after 8 seconds
 		SsmlOutputSpeech repromptSpeech = new SsmlOutputSpeech();
-		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hey!</emphasis> say something please</speak>");
+		repromptSpeech.setSsml("<speak><emphasis level=\"strong\">Hello.</emphasis> please say something.</speak>");
 
 		Reprompt rep = new Reprompt();
 		rep.setOutputSpeech(repromptSpeech);
